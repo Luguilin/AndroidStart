@@ -131,41 +131,6 @@ public class DateUtil {
         return "";
     }
 
-    /**
-     * 取得当前时间戳（精确到秒）
-     *
-     * @return
-     */
-    public static String timeStamp() {
-        long time = System.currentTimeMillis();
-        String t = String.valueOf(time / 1000);
-        return t;
-    }
-
-    /**
-     * 得到当前的时间
-     *
-     * @return 例如：2015-01-06 22:56
-     */
-    public static String getStringDate() {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = formatter.format(currentTime);
-        return dateString;
-    }
-
-    /**
-     * 得到当前的时间
-     *
-     * @param format
-     * @return
-     */
-    public static String getStringDate(String format) {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat(format);
-        String dateString = formatter.format(currentTime);
-        return dateString;
-    }
 
     /**
      * 计算时间差

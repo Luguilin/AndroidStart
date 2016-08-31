@@ -110,6 +110,17 @@ public class DateHelper {
     }
 
     /**
+     * 取得当前时间戳（精确到秒）
+     *
+     * @return
+     */
+    public static String getUnixTimestampNow2() {
+        long time = System.currentTimeMillis();
+        String t = String.valueOf(time / 1000);
+        return t;
+    }
+
+    /**
      * 将指定的日期转换成Unix时间戳
      *
      * @param dateStr date 需要转换的日期 yyyy-MM-dd HH:mm:ss

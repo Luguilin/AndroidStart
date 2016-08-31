@@ -2,6 +2,9 @@ package lgl.androidstart.tool;
 
 import java.security.MessageDigest;
 
+/**
+ * 加密编码
+ */
 public class EncryptUtils {
 
 	public final static String MD5(String s) {
@@ -29,7 +32,32 @@ public class EncryptUtils {
             return null;
         }
     }
-	
+
+    public static String toMD5(String plainText) {
+        try {
+            //生成实现指定摘要算法的 MessageDigest 对象。
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //使用指定的字节数组更新摘要。
+            md.update(plainText.getBytes());
+            //通过执行诸如填充之类的最终操作完成哈希计算。
+            byte b[] = md.digest();
+            //生成具体的md5密码到buf数组
+            int i;
+            StringBuffer buf = new StringBuffer("");
+            for (int offset = 0; offset < b.length; offset++) {
+                i = b[offset];
+                if (i < 0) i += 256;
+                if (i < 16) buf.append("0");
+                buf.append(Integer.toHexString(i));
+            }
+            //            System.out.println(buf.toString());// 32位的加密
+            //            System.out.println(buf.toString().substring(8, 24));// 16位的加密，其实就是32位加密后的截取
+            return buf.toString().substring(8, 24);
+        } catch (Exception e) {
+            return "" + (int) (Math.random() * 1000000);//如果加密失败则给出一个随机数
+        }
+    }
+
 	public static String ABase64(String token) {
 		// 看起来用法与Java所带的sun.misc的Base64Encoder这些用法差不多，但应该留意到了，在encode的时候，会有一个参数Flags（即上面代码中的Base64.DEFAULT）
 		// 这个参数有什么用呢？根据Android SDK的描述，这种参数有5个：
