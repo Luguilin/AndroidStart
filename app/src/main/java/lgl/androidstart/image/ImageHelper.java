@@ -1,11 +1,20 @@
 package lgl.androidstart.image;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
+import lgl.androidstart.MyApplication;
+import lgl.androidstart.R;
 
 public class ImageHelper {
 
@@ -87,5 +96,73 @@ public class ImageHelper {
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+    }
+
+
+
+    void DDD() {
+
+        /**
+         * BitmapFactory中有好生成位图的方法
+         */
+        Bitmap rawBitmap = BitmapFactory.decodeResource(MyApplication.getContext().getResources(), R.mipmap.ic_launcher);
+
+        // 2========将图片高宽和的大小kB压缩
+        // 得到图片原始的高宽
+        int rawHeight = rawBitmap.getHeight();
+        int rawWidth = rawBitmap.getWidth();
+        // 设定图片新的高宽
+        int newHeight = 500;
+        int newWidth = 500;
+        // 计算缩放因子
+        float heightScale = ((float) newHeight) / rawHeight;
+        float widthScale = ((float) newWidth) / rawWidth;
+
+        // 新建立矩阵
+        Matrix matrix = new Matrix();
+        matrix.postScale(heightScale, widthScale);
+
+        // 设置图片的旋转角度
+        // matrix.postRotate(-30);
+        // 设置图片的倾斜
+        // matrix.postSkew(0.1f, 0.1f);
+        // 将图片大小压缩
+        // 压缩后图片的宽和高以及kB大小均会变化
+        Bitmap newBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, rawWidth, rawWidth, matrix, true);
+    }
+
+    /**
+     * Drawable转化为Bitmap
+     */
+    public Bitmap drawableToBitmap(Drawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public Drawable bitmapToDrawble(Bitmap bitmap, Context mcontext) {
+        Drawable drawable = new BitmapDrawable(mcontext.getResources(), bitmap);
+        return drawable;
+    }
+
+    // Bitmap --> byte[]
+    byte[] Bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    // byte[] --> Bitmap
+    Bitmap Bytes2Bimap(byte[] b) {
+        if (b.length != 0) {
+            return BitmapFactory.decodeByteArray(b, 0, b.length);
+        } else {
+            return null;
+        }
     }
 }

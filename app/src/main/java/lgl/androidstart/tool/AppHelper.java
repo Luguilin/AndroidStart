@@ -58,4 +58,10 @@ public class AppHelper {
 		return 1;
 	}
 
+
+
+//	long memory=Runtime.getRuntime().maxMemory();//获取系统分配的最大内存      单位是   KB
+//
+//	int memory1=((ActivityManager)getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();   单位是  MB
+
 }
