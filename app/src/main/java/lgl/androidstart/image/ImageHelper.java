@@ -145,6 +145,7 @@ public class ImageHelper {
         return bitmap;
     }
 
+    //bitmap和Drawable互转
     public Drawable bitmapToDrawble(Bitmap bitmap, Context mcontext) {
         Drawable drawable = new BitmapDrawable(mcontext.getResources(), bitmap);
         return drawable;
