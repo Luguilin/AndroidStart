@@ -89,6 +89,26 @@ public final class DiskLruCache implements Closeable {
      * occasionally be compacted by dropping redundant lines. A temporary file named
      * "journal.tmp" will be used during compaction; that file should be deleted if
      * it exists when the cache is opened.
+     *
+     * private static DiskLruCache mDiskLruCache = null;
+     *
+     *
+---------------------http://www.tuicool.com/articles/JB7RNj------------------------------------------------
+    void OpenDiskLruCache() {
+        if (mDiskLruCache == null) {
+            File cacheDir = FileHelper.getDiskCacheDir(getApplicationContext(), "bitmap");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            try {
+                long size = 10 * 1024 * 1024;
+                mDiskLruCache = DiskLruCache.open(cacheDir, AppHelper.getAppVersion(getApplicationContext()), 1, size);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+--------------------------------------------------------------------------------------------------------
      */
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
 	private static final int IO_BUFFER_SIZE = 8 * 1024;

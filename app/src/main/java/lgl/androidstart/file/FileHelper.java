@@ -3,9 +3,11 @@ package lgl.androidstart.file;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -159,5 +161,24 @@ public class FileHelper {
 			}
 		}
 		return out;
+	}
+
+	/**
+	 * 读取Assets文件
+	 * @param context 上下文对象
+	 * @param fileName 文件名  eg:  index.html   aaa.json
+     * @return
+     */
+	public static String readAssets(Context context,  String fileName){
+		String resultString="";
+		try {
+			InputStream inputStream=context.getResources().getAssets().open(fileName);
+			byte[] buffer=new byte[inputStream.available()];
+			inputStream.read(buffer);
+			resultString=new String(buffer,"GB2312");
+		} catch (Exception e) {
+			Log.e("----assetsException---",e.getMessage());
+		}
+		return resultString;
 	}
 }
