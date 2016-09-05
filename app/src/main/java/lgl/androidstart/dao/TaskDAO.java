@@ -66,7 +66,7 @@ public class TaskDAO<T> {
 //        String selectSql = "select * from task where user_id=?;";
 //        List<T> tasks = new ArrayList<>();
 //        Cursor cursor = mReadableDatabase.rawQuery(selectSql, new String[]{MyApplication.userInfo.getUser_id() + ""});
-//        if (cursor.getCount() == 0) return tasks;
+//        if (cursor==null||cursor.getCount() == 0) return tasks;
 //        cursor.moveToFirst();
 //        do {
 //            T task = new T();

@@ -81,7 +81,6 @@ public class StringHelper {
     }
 
     // 校验文本只能是数字,英文字母和中文
-
     public static boolean isValidTagAndAlias(String s) {
         Pattern p = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_-]{0,}$");
         Matcher m = p.matcher(s);

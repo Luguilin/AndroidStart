@@ -1,4 +1,4 @@
-package lgl.androidstart.file;
+package lgl.androidstart.http;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

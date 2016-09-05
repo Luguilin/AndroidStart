@@ -13,7 +13,9 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 
-
+/**
+ * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
+ */
 public class IOHelper {
 
     /**

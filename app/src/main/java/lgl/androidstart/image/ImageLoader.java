@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
-import lgl.androidstart.file.DownloadImgUtils;
+import lgl.androidstart.http.DownloadImgUtils;
 
 /**
  * 图片加载类 http://blog.csdn.net/lmj623565791/article/details/41874561

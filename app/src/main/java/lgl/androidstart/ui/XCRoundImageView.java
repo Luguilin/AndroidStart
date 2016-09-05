@@ -65,8 +65,7 @@ public class XCRoundImageView extends ImageView {
      * @author caizhiming
      */
     private Bitmap getCircleBitmap(Bitmap bitmap, int pixels) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         final int color = 0xff424242;
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());

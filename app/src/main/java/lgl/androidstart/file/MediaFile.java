@@ -64,10 +64,8 @@ public class MediaFile {
         }
     }
     
-    private static HashMap<String, MediaFileType> sFileTypeMap 
-            = new HashMap<String, MediaFileType>();
-    private static HashMap<String, Integer> sMimeTypeMap 
-            = new HashMap<String, Integer>();            
+    private static HashMap<String, MediaFileType> sFileTypeMap= new HashMap<String, MediaFileType>();
+    private static HashMap<String, Integer> sMimeTypeMap = new HashMap<String, Integer>();
     @SuppressLint("UseValueOf")
 	static void addFileType(String extension, int fileType, String mimeType) {
         sFileTypeMap.put(extension, new MediaFileType(fileType, mimeType));

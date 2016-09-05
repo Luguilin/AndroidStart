@@ -66,8 +66,7 @@ public class EncryptUtils {
 		// NO_PADDING 这个参数是略去加密字符串最后的”=”
 		// NO_WRAP 这个参数意思是略去所有的换行符（设置后CRLF就没用了）
 		// URL_SAFE 这个参数意思是加密时不使用对URL和文件名有特殊意义的字符来作为加密字符，具体就是以-和_取代+和/
-		String base64Token = android.util.Base64.encodeToString(token.trim().getBytes(),
-				android.util.Base64.NO_WRAP);
+		String base64Token = android.util.Base64.encodeToString(token.trim().getBytes(),android.util.Base64.NO_WRAP);
 		return base64Token;
 	}
 
