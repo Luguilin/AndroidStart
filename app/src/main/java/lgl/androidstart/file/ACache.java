@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Michael Yang（www.yangfuhai.com） update at 2013.08.07
+ * http://www.2cto.com/kf/201604/499369.html
  */
 public class ACache {
 	public static final int TIME_HOUR = 60 * 60;
