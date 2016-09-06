@@ -3,7 +3,8 @@ package lgl.androidstart.tool;
 import java.security.MessageDigest;
 
 /**
- * 加密编码
+ * @author LGL
+ * @description 加密编码
  */
 public class EncryptUtils {
 

@@ -8,7 +8,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 
-//获得屏幕相关的辅助类
+/**
+ * @author LGL
+ * @description 获得屏幕相关的辅助类
+ */
 public class ScreenUtils
 {
 	private ScreenUtils()

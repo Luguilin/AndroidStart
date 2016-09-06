@@ -5,7 +5,10 @@ import android.os.StatFs;
 
 import java.io.File;
 
-//SD卡相关的辅助类
+/**
+ * @author LGL
+ * @description SD卡相关的辅助类
+ */
 public class SDCardUtils
 {
 	private SDCardUtils()

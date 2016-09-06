@@ -7,6 +7,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+/**
+ * @author LGL
+ * @description
+ */
 public class AppHelper {
 
 	/**

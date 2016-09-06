@@ -6,9 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 对String进行一定的处理功能
- *
  * @author LGL
+ * @description 对String进行一定的处理功能
  */
 public class StringHelper {
 
@@ -19,7 +18,7 @@ public class StringHelper {
      * @return 是空的
      */
     public static Boolean isEmpty(String s) {
-        if (s == null || s.equals("") || s.length() < 1) {
+        if (s == null || s.length() < 1 || s.equals("")||s.equals("null")|| s.equals("[null]")) {
             return true;
         }
         return false;

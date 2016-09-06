@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * @author LGL
+ */
 public class DateHelper {
 
     /**
@@ -15,6 +18,7 @@ public class DateHelper {
     public static final String DATE_ALL_STR = "yyyy-MM-dd HH:mm:ss:SS";//精确到微妙
     public static final String DATE_SMALL_STR = "yyyy-MM-dd";
     public static final String DATE_KEY_STR = "yyMMddHHmmss";
+    public static final String DATE_SHOT_STR = "HH:mm:ss";
 
     /**
      * 将字符串转换为Date
@@ -26,6 +30,8 @@ public class DateHelper {
     public static Date parse(String strDate, String... pattern) {
         SimpleDateFormat df = new SimpleDateFormat(getDefaultPattern(pattern));
         try {
+//            ParsePosition pos = new ParsePosition(0);//后面的参数代表从第几位开始  防止不干净的时间字符串
+//            return df.parse(strDate,pos);
             return df.parse(strDate);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -97,6 +103,23 @@ public class DateHelper {
     public static String getNowTime(String... pattern) {
         SimpleDateFormat df = new SimpleDateFormat(getDefaultPattern(pattern));
         return df.format(new Date());
+    }
+
+    /**
+     * 得到现在几点
+     *
+     * @param how   <0  Hour      >=0  Min
+     * @return
+     */
+    public static String getHour(int how) {
+        String dateString = getNowTime("yyyy-MM-dd HH:mm:ss");
+        if (how <0) {
+            String hour = dateString.substring(11, 13);
+            return hour;
+        } else {
+            String min = dateString.substring(14, 16);
+            return min;
+        }
     }
 
     /**
@@ -205,6 +228,48 @@ public class DateHelper {
         String result = year + "- " + (month.length() == 1 ? ("0 " + month) : month) + "- " + (day.length() == 1 ? ("0 " + day) : day);
         return parse(result);
     }
+
+    /**
+     * 计算和现在时间相差多少时间
+     *
+     * @param endDates 需要比较的日期
+     * @return eg: 15分钟前、 刚刚
+     */
+    public static String twoDateDistance(String endDates, String... pattern) {
+        Date endDate = parse(endDates, pattern);
+        //计算和现在的时间时间差（秒）
+        long timeLong = (endDate.getTime() - new Date().getTime()) / -1000;// 单位毫秒，除以1000转换成秒
+        // 单位秒
+        long month = 60 * 60 * 24 * 7 * 4;// 月
+        long week = 60 * 60 * 24 * 7;// 周
+        long day = 60 * 60 * 24;// 天
+        long hour = 60 * 60;// 小时
+        long minute = 60; // 分钟
+        long second = 1; // 秒
+
+        if (timeLong < minute)//《一分钟
+            return timeLong / second + "秒前";
+        else if (timeLong < hour) {//《一小时
+            timeLong = timeLong / minute;
+            if (timeLong < 10) return "刚刚";
+            else return timeLong + "分钟前";
+        } else if (timeLong < day) {//《一小时
+            timeLong = timeLong / hour;
+            return timeLong + "小时前";
+        } else if (timeLong < week) {
+            timeLong = timeLong / day;
+            return timeLong + "天前";
+        } else if (timeLong < month) {
+            timeLong = timeLong / week;
+            return timeLong + "周前";
+        } else {
+            // 如果超过几周则显示日期
+            String str = new String(endDates);
+            String date1[] = str.split(" ");
+            return date1[0];
+        }
+    }
+
     // SimpleDateFormat函数语法：
     // G 年代标志符
     // y 年

@@ -2,11 +2,9 @@ package lgl.androidstart.tool;
 
 import android.content.Context;
 import android.util.TypedValue;
-
 /**
- * 常用单位转换的辅助类
- *
  * @author LGL
+ * @description  常用单位转换的辅助类
  */
 public class DensityHelper {
 

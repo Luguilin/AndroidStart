@@ -3,8 +3,8 @@ package lgl.androidstart.file;
 import java.lang.reflect.Field;
 
 /**
- * 作者: LGL on 2016/8/31.
- * 邮箱: 468577977@qq.com
+ * @author LGL on 2016/8/31.
+ * @description
  */
 public class ResHelper {
     /**

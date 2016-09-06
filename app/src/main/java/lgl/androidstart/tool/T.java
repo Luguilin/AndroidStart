@@ -3,7 +3,9 @@
 import android.content.Context;
 import android.widget.Toast;
 
- //Toast统一管理类
+/**
+ * @description Toast统一管理类
+ */
 public class T
 {
 
