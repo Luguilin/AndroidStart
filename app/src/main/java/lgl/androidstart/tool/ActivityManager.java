@@ -6,9 +6,9 @@ import android.content.Context;
 import java.util.Stack;
 
 /**
- * 管理activity
+ * @author LGL
+ * @description  管理activity
  */
-
 public class ActivityManager {
     private static Stack<Activity> mActivityStack;
     private static ActivityManager mAppManager;

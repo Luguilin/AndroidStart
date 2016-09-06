@@ -2,7 +2,10 @@
 
 import android.util.Log;
 
-//Logcat统一管理类
+/**
+ * @author LGL
+ * @description Logcat统一管理类
+ */
 public class L {
 
     private L() {

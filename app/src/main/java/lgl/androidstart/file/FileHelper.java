@@ -11,9 +11,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 /**
- * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
+ * @author LGL on 2016/8/8.
+ * @description
  */
 public class FileHelper {
 	/**

@@ -12,7 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import lgl.androidstart.R;
-
+/**
+ * @author LGL
+ * @description
+ */
 public class AskDialog extends Dialog {
 	private onDismissListen dismissListen;
 

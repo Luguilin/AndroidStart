@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-//跟网络相关的工具类
+/**
+ * @author LGL
+ * @description  跟网络相关的工具类
+ */
 public class NetUtils
 {
 	private NetUtils()

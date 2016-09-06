@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-
+/**
+ * @author LGL
+ * @description
+ */
 public class SharedPreHelper {
     public SharedPreHelper() {
         /* cannot be instantiated */

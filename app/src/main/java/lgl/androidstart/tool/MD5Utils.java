@@ -2,10 +2,9 @@ package lgl.androidstart.tool;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 /**
- * md5加密工具类
- *java 版
+ * @author LGL
+ * @description  md5加密工具类  java 版
  */
 public class MD5Utils {
 
