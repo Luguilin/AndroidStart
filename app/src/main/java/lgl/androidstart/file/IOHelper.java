@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 
 /**
  * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
+ * @description
  */
 public class IOHelper {
 
@@ -117,8 +118,8 @@ public class IOHelper {
             } finally {
 
             }
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -128,13 +129,13 @@ public class IOHelper {
      * @return
      * @throws RuntimeException 异常转为RuntimeException
      */
-    public static InputStream getInputStream4File(String file_path) throws RuntimeException {
+    public static InputStream getInputStream4File(String file_path){
         File file = new File(file_path);
         InputStream inputStream = null;
         try {
             inputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("没拿到InputStream----------》》》"+e.getMessage());
+            e.printStackTrace();
         }
         return inputStream;
     }
