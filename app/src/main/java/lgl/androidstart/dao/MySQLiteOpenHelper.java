@@ -3,7 +3,14 @@ package lgl.androidstart.dao;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import java.io.File;
+import java.io.InputStream;
+
+import lgl.androidstart.MyApplication;
+import lgl.androidstart.file.FileHelper;
+import lgl.androidstart.file.IOHelper;
+import lgl.androidstart.tool.L;
 
 /**
  * Created by LGL on 2016/8/16.
@@ -18,23 +25,70 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             "age integer not null default 18 check(age>18)," +
             "address char(50)" +
             ")";
-
+    String mDBname;
     public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        mDBname=name;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createSql);
+        db.execSQL(TaskDAO.createSql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.e("==========","我执行了版本升级");
+        L.i("==========","我数据库执行了版本升级       "+newVersion+"------》"+newVersion);
         //因为升级的时候有可能添加一些东西或修改一些，所以需要把数据备份到另一张表中  升级好了之后再存回来
+        try {
+            // // 备份数据库到SD卡的/aDBTest/DBTest.db
+            // CopyDB2SD();
+            for (int i = oldVersion; i < newVersion; i++) {//假如用户一直使用很老的APP版本   而数据库已经更新了好几个版本   所以这里要这样来循环跟新
+                switch (i) {
+                    case 1:
+                        UpgradedVersion1To2(db);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    protected void UpgradedVersion1To2(SQLiteDatabase db){
 
+        try {
+            db.execSQL("alter table user rename to temp_user");//改表，名
+
+            db.execSQL("drop table if exists user");//确保之前的表不存在
+
+            db.execSQL("create table if not exists user(id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(10), remark varchar(50), age varchar(10))");//新建表
+
+            db.execSQL("insert into user select id, name, remark, 'age_lala' from temp_user");//数据放回
+
+            db.execSQL("drop table if exists temp_user");//删除新表
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 数据库备份到SD卡中去
+     * @return
+     */
+    public boolean CopyDB2SD() {
+
+        File dbFile = MyApplication.getContext().getDatabasePath(mDBname);
+        File file =FileHelper.getDiskCacheDir(MyApplication.getContext(),"copy");
+
+        InputStream in=IOHelper.getInputStream4File(dbFile.getAbsolutePath());
+        IOHelper.WirteFile(in,file+File.separator+mDBname);
+
+        return false;
+    }
     /**
      * 各种SQL语句
      *

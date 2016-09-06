@@ -17,20 +17,20 @@ import java.util.Date;
  */
 public class FileHelper {
 	/**
-	 * 获得程序缓存路径
+	 * 获得程序缓存路径(没有将创建一个指定文件夹)
 	 *
 	 * @param context
-	 * @param file_name 缓存路径下的需要创建的文件夹
+	 * @param dir_name 缓存路径下的需要创建的文件夹
 	 * @return
 	 */
-	public static File getDiskCacheDir(Context context, String file_name) {
+	public static File getDiskCacheDir(Context context, String dir_name) {
 		String cachePath;
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
 			cachePath = context.getExternalCacheDir().getPath();
 		} else {
 			cachePath = context.getCacheDir().getPath();
 		}
-		File file = new File(cachePath + File.separator + file_name);
+		File file = new File(cachePath + File.separator + dir_name);
 		if (file.getParentFile() == null || !file.getParentFile().exists() || !file.exists()) {
 			file.mkdirs();// 创建文件夹
 		}

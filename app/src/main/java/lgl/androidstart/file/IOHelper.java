@@ -100,7 +100,7 @@ public class IOHelper {
      * @param inputStream 目标流
      * @param file_path   要写入的文件名
      */
-    public static void WirteFile2SD(InputStream inputStream, String file_path) {
+    public static void WirteFile(InputStream inputStream, String file_path) {
         File file = new File(file_path);
         FileHelper.existFile(file);
         try {
@@ -122,13 +122,19 @@ public class IOHelper {
         }
     }
 
-    public static InputStream getInputStream4File(String file_path) {
+    /**
+     * 从指定文件中得到一个InputStream对象
+     * @param file_path eg:路径+文件.txt
+     * @return
+     * @throws RuntimeException 异常转为RuntimeException
+     */
+    public static InputStream getInputStream4File(String file_path) throws RuntimeException {
         File file = new File(file_path);
         InputStream inputStream = null;
         try {
             inputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException("没拿到InputStream----------》》》"+e.getMessage());
         }
         return inputStream;
     }
