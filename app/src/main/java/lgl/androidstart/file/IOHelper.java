@@ -10,8 +10,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
@@ -152,14 +156,15 @@ public class IOHelper {
 
     /**
      * 请确保 File 有效 ！大小  >=start
+     *
      * @param inputStream
-     * @param target         目标文件路径  eg: 路径+文件名.txt
+     * @param target            目标文件路径  eg: 路径+文件名.txt
      * @param start             从哪里开始写
      * @param howLenghtListener 写入进度监听器
      */
     public static void RandomWirte(InputStream inputStream, File target, int start, wirteHowLenghtListener howLenghtListener) {
         if (inputStream == null) return;
-        if (target==null||!target.exists()||target.length()+1<start)return;//无效文件
+        if (target == null || !target.exists() || target.length() + 1 < start) return;//无效文件
         RandomAccessFile raf = null;
         int sum_len = 0;
         try {
@@ -178,7 +183,7 @@ public class IOHelper {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (raf != null) raf.close();
             } catch (IOException e1) {
@@ -189,10 +194,10 @@ public class IOHelper {
 
     public static void RandomWirte(byte[] buffer, String file_path, int start) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
-        File target=new File(file_path);
+        File target = new File(file_path);
         FileHelper.existFile(target);
         try {
-            RandomAccessFile raf =new RandomAccessFile(target,"rwd");
+            RandomAccessFile raf = new RandomAccessFile(target, "rwd");
             raf.setLength(buffer.length);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -200,7 +205,68 @@ public class IOHelper {
             e.printStackTrace();
         }
 //        RandomWirte(byteArrayInputStream, , start, null);
-
     }
 
+    /**
+     *
+     * @param outputStream 网络流
+     * @param parames 所有的参数
+     * @param boundary 分割线   eg:--------lgl------------------  base64加密的lgl
+     */
+    public static void WirtePremes(OutputStream outputStream, HashMap<String, Object> parames, String boundary) {
+        StringBuffer stringBuffer = new StringBuffer();
+        String rn = "\r\n";
+        boundary = rn + boundary;
+
+        LinkedHashMap<String, File> files = new LinkedHashMap<>();
+        long sizeSum = 0;//总大小
+        for (String key : parames.keySet()) {
+            Object o = parames.get(key);
+
+            stringBuffer.append(boundary + rn);
+
+            if (o instanceof String) {
+                stringBuffer.append(MessageFormat.format("Content-Disposition: form-data; name=\"{0}\"", key));
+                stringBuffer.append(rn);
+                stringBuffer.append((String) o);
+                stringBuffer.append(rn);
+            } else if (o instanceof File) {
+                File file = (File) o;
+                files.put(key, file);
+                sizeSum += file.length();
+            }
+        }
+        byte[] premesStr = stringBuffer.toString().getBytes();
+        sizeSum += premesStr.length;
+        try {
+
+            outputStream.write(premesStr);
+            for (String key : files.keySet()) {
+                stringBuffer.setLength(0);
+                File file = files.get(key);
+
+                stringBuffer.append(boundary + rn);
+
+                stringBuffer.append(rn);
+
+                stringBuffer.append(MessageFormat.format("Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\n", key, file.getName()));
+                stringBuffer.append(rn);
+                stringBuffer.append("Content-Type: application/octet-stream");
+                stringBuffer.append(rn);
+
+                outputStream.write(stringBuffer.toString().getBytes());
+
+                RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
+                byte[] buffer = new byte[1024 * 5];
+                int len;
+                while ((len = randomAccessFile.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, len);
+                }
+            }
+            String end = boundary + "--" + rn;
+            outputStream.write(end.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

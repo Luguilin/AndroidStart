@@ -1,4 +1,4 @@
-﻿package lgl.androidstart.file;
+package lgl.androidstart.file;
 
 import android.os.Environment;
 import android.os.StatFs;

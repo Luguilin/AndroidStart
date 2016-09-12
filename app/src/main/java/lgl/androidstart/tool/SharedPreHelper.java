@@ -1,4 +1,4 @@
-﻿package lgl.androidstart.tool;
+package lgl.androidstart.tool;
 
 import android.content.Context;
 import android.content.SharedPreferences;
