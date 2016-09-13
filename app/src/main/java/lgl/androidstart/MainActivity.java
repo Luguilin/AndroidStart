@@ -6,15 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import lgl.androidstart.file.IOHelper;
 import lgl.androidstart.http.RequestFactory;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+
                     HashMap<String, String> premes = new HashMap<>();
                     premes.put("name", "cHN5MQ==");
                     premes.put("password", "MTEx");
@@ -62,63 +63,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    String aaa = "------WebKitFormBoundaryLLGIEgTXIUBu9iNr\n" +
-            "Content-Disposition: form-data; name=\"user_id\"\n" +
-            "\n" +
-            "13\n" +
-            "------WebKitFormBoundaryLLGIEgTXIUBu9iNr\n" +
-            "Content-Disposition: form-data; name=\"file\"; filename=\"\"\n" +
-            "Content-Type: application/octet-stream\n" +
-            "\n" +
-            "\n" +
-            "------WebKitFormBoundaryLLGIEgTXIUBu9iNr--";
 
     public void aaaaaa() {
         String updateStr = "http://192.168.1.192:4080/resourceview/ServletAll";
-        String boundary = "----WebKitFormBoundaryLLGIEgTXIUBu9iNr";
-        HashMap<String, String> parems = new HashMap<>();
+        String boundary = RequestFactory.boundary;
+        HashMap<String, String> parems = new LinkedHashMap<>();
         parems.put("action", "updateUserFace");
         parems.put("access_token", token);
-        updateStr += RequestFactory.getPramesString(parems, "utf-8");
+
         try {
             L.e(updateStr);
-            URL url = new URL(updateStr);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection = RequestFactory.postHttpURLConnection(connection, boundary, null);
-
+            HttpURLConnection connection=RequestFactory.getHttpURLConnection(updateStr, parems);
             connection.connect();
-            OutputStream outputStream = connection.getOutputStream();
+
+            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
 
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("face", new File("/storage/emulated/0/A.png"));
-            hashMap.put("user_id","13");
-            IOHelper.WirtePremes(outputStream, hashMap, boundary);
+            File file= new File("/storage/emulated/0/A.png");
+//            L.e("exists====="+file.exists());
+            hashMap.put("file",file);
+            hashMap.put("user_id", "1");
+//            String fName = "-------safdsafdsafdsafdsa\r\n" +
+//                    "Content-Disposition: form-data; name=\"user_id\"\r\n\r" +
+//                    "\n1\r\n" +
+//                    "-------safdsafdsafdsafdsa--";
 
 
-//            outputStream.write("Content-Disposition: form-data; name=\"file\"; filename=\"\"".getBytes());
-//            outputStream.write(("\r\t").getBytes());
-//            outputStream.write("Content-Type: application/octet-stream".getBytes());
-//            outputStream.write("\r\t".getBytes());
+//            outputStream.writeBytes(fName);
 
-//            String aa=;
-//            InputStream file_pohto=IOHelper.getInputStream4File(aa);
-//
-//            byte[] buffetr=new byte[1024*10];
-//            int len=0;
-//          while ((len=file_pohto.read(buffetr))>0){
-//                outputStream.write(buffetr,0,len);
-//          }
-//            outputStream.write(boundary.getBytes());
-//            outputStream.flush();
-//            outputStream.close();
+//            RequestFactory.printResponseHeader(connection);
+            IOHelper.WirtePremes(outputStream, hashMap);
+
+//            int len;
+//            FileInputStream fileReader = new FileInputStream("/storage/emulated/0/b.jpg");
+//            byte[] buffer = new byte[1024 * 80];
+//            while ((len = fileReader.read()) > 0) {
+//                outputStream.write(buffer, 0, len);
+//            }
+
+//            outputStream.write("------WebKitFormBoundaryvNHP2OD2375X2MQy--".getBytes());
+            outputStream.flush();
+            outputStream.close();
 
             InputStream inputStream = connection.getInputStream();
             String reslt = IOHelper.ReadString4Stream(inputStream).toString();
-            L.i(reslt + "++++++++++");
+            L.i(reslt);
+//            L.i(connection.getResponseMessage());
 
-            outputStream.flush();
-            outputStream.close();
-            inputStream.close();
+//            RequestFactory.printResponseHeader(connection);
+//            inputStream.close();
             connection.disconnect();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -127,7 +120,5 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

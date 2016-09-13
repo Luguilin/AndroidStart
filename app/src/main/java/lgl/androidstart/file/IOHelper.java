@@ -17,6 +17,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import lgl.androidstart.http.RequestFactory;
+
 /**
  * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
  *
@@ -208,62 +210,57 @@ public class IOHelper {
     }
 
     /**
-     *
      * @param outputStream 网络流
-     * @param parames 所有的参数
-     * @param boundary 分割线   eg:--------lgl------------------  base64加密的lgl
+     * @param parames      所有的参数
      */
-    public static void WirtePremes(OutputStream outputStream, HashMap<String, Object> parames, String boundary) {
+    public static void WirtePremes(OutputStream outputStream, HashMap<String, Object> parames) {
         StringBuffer stringBuffer = new StringBuffer();
         String rn = "\r\n";
-        boundary = rn + boundary;
-
         LinkedHashMap<String, File> files = new LinkedHashMap<>();
         long sizeSum = 0;//总大小
         for (String key : parames.keySet()) {
             Object o = parames.get(key);
 
-            stringBuffer.append(boundary + rn);
-
             if (o instanceof String) {
+                stringBuffer.append("--" + RequestFactory.boundary);
+                stringBuffer.append(rn);
                 stringBuffer.append(MessageFormat.format("Content-Disposition: form-data; name=\"{0}\"", key));
+                stringBuffer.append(rn);
                 stringBuffer.append(rn);
                 stringBuffer.append((String) o);
                 stringBuffer.append(rn);
+                //一个文件到此结束
             } else if (o instanceof File) {
                 File file = (File) o;
                 files.put(key, file);
                 sizeSum += file.length();
             }
         }
+
+        String a = stringBuffer.toString();
+
         byte[] premesStr = stringBuffer.toString().getBytes();
         sizeSum += premesStr.length;
         try {
-
             outputStream.write(premesStr);
             for (String key : files.keySet()) {
-                stringBuffer.setLength(0);
+                byte[] newline = "\r\n".getBytes();//换行
+                outputStream.write(("--" + RequestFactory.boundary).getBytes());
+                outputStream.write(newline);
+                outputStream.write("Content-Disposition: form-data; name=\"file\"; filename=\"i.png\"".getBytes());
+                outputStream.write(newline);
+                outputStream.write("Content-Type: application/octet-stream".getBytes());//这个地方是两个\r\n
+                outputStream.write(newline);
+                outputStream.write(newline);
+
                 File file = files.get(key);
-
-                stringBuffer.append(boundary + rn);
-
-                stringBuffer.append(rn);
-
-                stringBuffer.append(MessageFormat.format("Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\n", key, file.getName()));
-                stringBuffer.append(rn);
-                stringBuffer.append("Content-Type: application/octet-stream");
-                stringBuffer.append(rn);
-
-                outputStream.write(stringBuffer.toString().getBytes());
-
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
                 byte[] buffer = new byte[1024 * 5];
                 int len;
-                while ((len = randomAccessFile.read(buffer)) > 0) {
+                while ((len = randomAccessFile.read(buffer)) > 0)
                     outputStream.write(buffer, 0, len);
-                }
             }
-            String end = boundary + "--" + rn;
+            String end = "\r\n--" + RequestFactory.boundary + "--";//结束   要在后面加上    --
             outputStream.write(end.getBytes());
         } catch (IOException e) {
             e.printStackTrace();

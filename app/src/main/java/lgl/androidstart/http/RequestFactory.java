@@ -25,7 +25,12 @@ import lgl.androidstart.tool.L;
  */
 public class RequestFactory {
 
-    private static boolean deBug=true;
+    /**
+     * 分割线
+     */
+    public static final String boundary = "---5Y2i5qGC5p6X";//base64
+
+    private static boolean deBug = true;
 
     public RequestFactory setDeBug(boolean deBug) {
         this.deBug = deBug;
@@ -77,7 +82,7 @@ public class RequestFactory {
         Map<String, String> header = getHttpResponseHeader(http);
         for (Map.Entry<String, String> entry : header.entrySet()) {
             String key = entry.getKey() != null ? entry.getKey() + ":" : "";
-            System.out.println(key + entry.getValue());
+            L.i(key + entry.getValue());
         }
     }
 
@@ -102,47 +107,12 @@ public class RequestFactory {
         return filename;
     }
 
-    public static HttpURLConnection postHttpURLConnection(HttpURLConnection connection, String boundary, String cookie) throws ProtocolException {
+    public static HttpURLConnection postHttpURLConnection(HttpURLConnection connection, String boundary, String cookie) {
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        // connection.setFixedLengthStreamingMode(contentLength);
         connection.setUseCaches(false);// 不缓存 可以的得到进度
         // connection.setFixedLengthStreamingMode(contentLength);
-        connection.setChunkedStreamingMode(0);
-        connection.setRequestMethod("POST");
-        connection.setConnectTimeout(10000);
-        connection.setRequestProperty("Connection", "keep-alive");
-        // connection.setRequestProperty("Content-Length", Length + "");
-        connection.setRequestProperty("Cache-Control", "max-age=0");
-        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        connection.setRequestProperty("Accept-Encoding", "deflate");
-        connection.addRequestProperty("Cache-Control", "no-cache");
-        connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
-        connection.setRequestProperty("Charset", "UTF-8");
-        if (cookie != null)
-            connection.addRequestProperty("Cookie", cookie);
-        return connection;
-    }
-    public static HttpURLConnection getHttpURLConnection(String urlStr,HashMap<String,String> prames){
-        urlStr+=getPramesString(prames,"utf-8");
-        if (deBug) L.i(urlStr);
-        HttpURLConnection connection=null;
-        try {
-            URL url=new URL(urlStr);
-            connection= (HttpURLConnection) url.openConnection();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-        // connection.setFixedLengthStreamingMode(contentLength);
-        connection.setUseCaches(false);// 不缓存 可以的得到进度
-        // connection.setFixedLengthStreamingMode(contentLength);
-        connection.setChunkedStreamingMode(0);
+        connection.setChunkedStreamingMode(0);//不分块
         try {
             connection.setRequestMethod("POST");
         } catch (ProtocolException e) {
@@ -150,15 +120,33 @@ public class RequestFactory {
         }
         connection.setConnectTimeout(10000);
         connection.setRequestProperty("Connection", "keep-alive");
-        // connection.setRequestProperty("Content-Length", Length + "");
+//      connection.setRequestProperty("Content-Length", Length + "");
+        connection.setRequestProperty("Transfer-Encoding", "chunked");//Length
         connection.setRequestProperty("Cache-Control", "max-age=0");
         connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-//        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        connection.setRequestProperty("Accept-Encoding", "deflate");
-        connection.addRequestProperty("Cache-Control", "no-cache");
+        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        connection.setRequestProperty("Accept-Encoding", "deflate");//gzip,
+//      connection.addRequestProperty("Cache-Control", "no-cache");
         connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
         connection.setRequestProperty("Charset", "UTF-8");
+        if (cookie != null)
+            connection.addRequestProperty("Cookie", cookie);
         return connection;
+    }
+
+    public static HttpURLConnection getHttpURLConnection(String urlStr, HashMap<String, String> prames) {
+        urlStr += getPramesString(prames, "utf-8");
+        if (deBug) L.i(urlStr);
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(urlStr);
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return postHttpURLConnection(connection, boundary, null);
     }
 
     /**
@@ -172,8 +160,8 @@ public class RequestFactory {
      */
     public void WirteMultipart(HttpURLConnection connection, Map<String, String> textSet, Map<String, File> fileMap, UpdataProgress updataProgress)
             throws IOException {
-        String end = "\r\n";
-        String boundary = end + "----4220f6594b9c88cb10484fd01ad6d92b" + end;//卢桂林
+        String end = "--";
+        String start = "--";
 
         byte[] byetContent = getTextContent(boundary, textSet);
         int contentLength = byetContent.length;
@@ -201,7 +189,7 @@ public class RequestFactory {
             textContent.append("Content-Disposition: form-data; name=\"" + key + "\"");
             textContent.append(end);
             // textContent.append("Content-Type: application/octet-stream");
-            textContent.append("Content-Type: image/jpeg");
+            textContent.append("Content-Type: multipart/form-data");
             textContent.append(end);
 
             byte[] fileText = textContent.toString().getBytes("utf-8");
@@ -210,7 +198,7 @@ public class RequestFactory {
             current_length += fileText.length;
 
             File file = fileMap.get(key);
-            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            RandomAccessFile raf = new RandomAccessFile(file, "rwd");
             byte[] buffer = new byte[1024 * 5];// 这代表每5KB才走一个进度
             int len = -1;
             while (((len = raf.read(buffer)) > 0)) {
@@ -245,7 +233,7 @@ public class RequestFactory {
             textContent.append(boundary);
             textContent.append("Content-Disposition: form-data; name=\"" + key + "\"");
             textContent.append(end);
-            textContent.append("Content-Type: image/jpeg");
+            textContent.append("Content-Type: multipart/form-data");
             // textContent.append("Content-Type: application/octet-stream");
             textContent.append(end);
             length += fileMap.get(key).length();
