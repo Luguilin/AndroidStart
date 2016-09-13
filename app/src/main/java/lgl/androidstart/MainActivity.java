@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void aaaaaa() {
         String updateStr = "http://192.168.1.192:4080/resourceview/ServletAll";
-        String boundary = RequestFactory.boundary;
         HashMap<String, String> parems = new LinkedHashMap<>();
         parems.put("action", "updateUserFace");
         parems.put("access_token", token);
@@ -80,28 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
             HashMap<String, Object> hashMap = new HashMap<>();
             File file= new File("/storage/emulated/0/A.png");
-//            L.e("exists====="+file.exists());
             hashMap.put("file",file);
             hashMap.put("user_id", "1");
-//            String fName = "-------safdsafdsafdsafdsa\r\n" +
-//                    "Content-Disposition: form-data; name=\"user_id\"\r\n\r" +
-//                    "\n1\r\n" +
-//                    "-------safdsafdsafdsafdsa--";
-
-
-//            outputStream.writeBytes(fName);
-
-//            RequestFactory.printResponseHeader(connection);
             IOHelper.WirtePremes(outputStream, hashMap);
 
-//            int len;
-//            FileInputStream fileReader = new FileInputStream("/storage/emulated/0/b.jpg");
-//            byte[] buffer = new byte[1024 * 80];
-//            while ((len = fileReader.read()) > 0) {
-//                outputStream.write(buffer, 0, len);
-//            }
-
-//            outputStream.write("------WebKitFormBoundaryvNHP2OD2375X2MQy--".getBytes());
             outputStream.flush();
             outputStream.close();
 

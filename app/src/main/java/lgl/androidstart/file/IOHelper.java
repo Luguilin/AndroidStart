@@ -237,8 +237,6 @@ public class IOHelper {
             }
         }
 
-        String a = stringBuffer.toString();
-
         byte[] premesStr = stringBuffer.toString().getBytes();
         sizeSum += premesStr.length;
         try {
