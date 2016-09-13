@@ -1,16 +1,14 @@
 package lgl.androidstart.http;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -18,45 +16,39 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import lgl.androidstart.tool.L;
+
 /**
  * @author LGL
  * @description
  */
 public class RequestFactory {
 
+    private static boolean deBug=true;
+
+    public RequestFactory setDeBug(boolean deBug) {
+        this.deBug = deBug;
+        return this;
+    }
+
     /**
      * @param prams
      * @param encode （字节码）客户端向服务器申请数据的时候可能会出现中文乱码的问题
      * @return
      */
+
     public static String getPramesString(HashMap<String, String> prams, String encode) {
         StringBuffer buffer = new StringBuffer("?");
         for (String key : prams.keySet()) {
             try {
-                buffer.append(key + ":" + URLEncoder.encode(prams.get(key), encode) + "&");
+                buffer.append(key + "=" + URLEncoder.encode(prams.get(key), encode) + "&");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
         buffer.deleteCharAt(buffer.length() - 1);
         return buffer.toString().trim();
-    }
-
-    /**
-     * 检查当前手机状态是否是有网的
-     *
-     * @param context
-     * @return true为有网
-     */
-    public static Boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
     }
 
     /**
@@ -90,29 +82,9 @@ public class RequestFactory {
     }
 
     /**
-     * 判断网络是否可用
-     *
-     * @param context
-     * @return
-     * @throws ProtocolException
-     */
-    // public boolean isNetworkConnected(Context context) {
-    // if (context != null) {
-    // ConnectivityManager mConnectivityManager = (ConnectivityManager)
-    // context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    // NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-    // if (mNetworkInfo != null) {
-    // return mNetworkInfo.isAvailable();
-    // }
-    // }
-    // return false;
-    // }
-
-    /**
      * 获取文件名
      */
     private String getFileName(String downloadUrl, HttpURLConnection conn) {
-
         String filename = downloadUrl.substring(downloadUrl.lastIndexOf('/') + 1);
         if (filename == null || "".equals(filename.trim())) {// 如果获取不到文件名称
             for (int i = 0; ; i++) {
@@ -130,7 +102,7 @@ public class RequestFactory {
         return filename;
     }
 
-    public HttpURLConnection getHttpURLConnection(HttpURLConnection connection, String boundary, String cookie) throws ProtocolException {
+    public static HttpURLConnection postHttpURLConnection(HttpURLConnection connection, String boundary, String cookie) throws ProtocolException {
         connection.setDoOutput(true);
         connection.setDoInput(true);
         // connection.setFixedLengthStreamingMode(contentLength);
@@ -151,7 +123,42 @@ public class RequestFactory {
         if (cookie != null)
             connection.addRequestProperty("Cookie", cookie);
         return connection;
+    }
+    public static HttpURLConnection getHttpURLConnection(String urlStr,HashMap<String,String> prames){
+        urlStr+=getPramesString(prames,"utf-8");
+        if (deBug) L.i(urlStr);
+        HttpURLConnection connection=null;
+        try {
+            URL url=new URL(urlStr);
+            connection= (HttpURLConnection) url.openConnection();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        // connection.setFixedLengthStreamingMode(contentLength);
+        connection.setUseCaches(false);// 不缓存 可以的得到进度
+        // connection.setFixedLengthStreamingMode(contentLength);
+        connection.setChunkedStreamingMode(0);
+        try {
+            connection.setRequestMethod("POST");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+        connection.setConnectTimeout(10000);
+        connection.setRequestProperty("Connection", "keep-alive");
+        // connection.setRequestProperty("Content-Length", Length + "");
+        connection.setRequestProperty("Cache-Control", "max-age=0");
+        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+//        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        connection.setRequestProperty("Accept-Encoding", "deflate");
+        connection.addRequestProperty("Cache-Control", "no-cache");
+        connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
+        connection.setRequestProperty("Charset", "UTF-8");
+        return connection;
     }
 
     /**

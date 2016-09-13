@@ -1,4 +1,4 @@
-﻿package lgl.androidstart.tool;
+package lgl.androidstart.tool;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-﻿package lgl.androidstart.http;
+package lgl.androidstart.http;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -168,14 +168,12 @@ public class HttpUtils
 		{
 			URL realUrl = new URL(url);
 			// 打开和URL之间的连接
-			HttpURLConnection conn = (HttpURLConnection) realUrl
-					.openConnection();
+			HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
 			// 设置通用的请求属性
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 			conn.setRequestProperty("charset", "utf-8");
 			conn.setUseCaches(false);
 			// 发送POST请求必须设置如下两行

@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -69,19 +70,20 @@ public class FileHelper {
 	 * @return
 	 */
 	public static boolean existFile(File file){
-		if (file.exists())return true;
-		if (file.isDirectory()&&!file.exists()) {
-			file.mkdirs();
-		}else if (!file.exists()) {
-			try {
+		synchronized (file) {//这里加入线程的锁定来防止多线程同事执行此步骤
+			if (file.exists()) return true;
+			if (file.isDirectory() && !file.exists()) {
 				file.mkdirs();
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} else if (!file.exists()) {
+				try {
+					file.mkdirs();
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			return true;
 		}
-		return true;
-		
 	}
 	/**
 	 * 获得一个空的缓存文件
@@ -180,5 +182,13 @@ public class FileHelper {
 			Log.e("----assetsException---",e.getMessage());
 		}
 		return resultString;
+	}
+	public static long getFileSize(FileInputStream fi){
+		try {
+			return fi.getChannel().size();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 }

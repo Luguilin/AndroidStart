@@ -1,4 +1,4 @@
-﻿package lgl.androidstart.http;
+package lgl.androidstart.http;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -57,6 +57,23 @@ public class NetUtils
 		intent.setComponent(cm);
 		intent.setAction("android.intent.action.VIEW");
 		activity.startActivityForResult(intent, 0);
+	}
+
+	/**
+	 * 检查当前手机状态是否是有网的
+	 *
+	 * @param context
+	 * @return true为有网
+	 */
+	public static Boolean isNetworkConnected(Context context) {
+		if (context != null) {
+			ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+			if (mNetworkInfo != null) {
+				return mNetworkInfo.isAvailable();
+			}
+		}
+		return false;
 	}
 
 }
