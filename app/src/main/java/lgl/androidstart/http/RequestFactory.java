@@ -1,9 +1,7 @@
 package lgl.androidstart.http;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -21,7 +19,7 @@ import lgl.androidstart.tool.L;
 
 /**
  * @author LGL
- * @description
+ * @description  做Http的配置
  */
 public class RequestFactory {
 
@@ -44,6 +42,7 @@ public class RequestFactory {
      */
 
     public static String getPramesString(HashMap<String, String> prams, String encode) {
+        if (prams==null)return "";
         StringBuffer buffer = new StringBuffer("?");
         for (String key : prams.keySet()) {
             try {
@@ -134,8 +133,53 @@ public class RequestFactory {
         return connection;
     }
 
-    public static HttpURLConnection getHttpURLConnection(String urlStr, HashMap<String, String> prames) {
+    /**
+     * 设置Get参数
+     * @param connection
+     * @param cookie
+     * @return
+     */
+    /**
+     *
+     * @param connection 链接对象
+     * @param cookie 没有cookie可以传null
+     * @param RangeStart 开始位置
+     * @param RangeEnd 结束位置
+     * @return 配置好的httprulconnction对象
+     */
+    public static HttpURLConnection getHttpURLConnection(HttpURLConnection connection, String cookie,long RangeStart,long RangeEnd) {
+//        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        connection.setUseCaches(false);// 不缓存 可以的得到进度
+        // connection.setFixedLengthStreamingMode(contentLength);
+        connection.setChunkedStreamingMode(0);//不分块
+        try {
+            connection.setRequestMethod("GET");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+        connection.setConnectTimeout(10000);
+        connection.setRequestProperty("Connection", "keep-alive");
+        connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+        connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
+        connection.setRequestProperty("Charset", "UTF-8");
+        String rangeStr="";
+        if (RangeStart>0){//bytes=154-456
+            rangeStr="bytes="+RangeStart+"-";
+            if (RangeEnd>0)rangeStr+=RangeEnd;
+            connection.setRequestProperty("Range", rangeStr);
+        }
+        connection.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");//
+        if (cookie != null)
+            connection.addRequestProperty("Cookie", cookie);
+        return connection;
+    }
+
+
+
+    private static HttpURLConnection getConnection(String urlStr, HashMap<String, String> prames){
         urlStr += getPramesString(prames, "utf-8");
+
         if (deBug) L.i(urlStr);
         HttpURLConnection connection = null;
         try {
@@ -146,74 +190,34 @@ public class RequestFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return postHttpURLConnection(connection, boundary, null);
+        return connection;
     }
 
-    /**
-     * 写入表单数据
-     *
-     * @param connection     连接对象
-     * @param textSet        表单中的文本集
-     * @param fileMap        表单中的文件集合
-     * @param updataProgress 上传进度的接口
-     * @throws IOException
-     */
-    public void WirteMultipart(HttpURLConnection connection, Map<String, String> textSet, Map<String, File> fileMap, UpdataProgress updataProgress)
-            throws IOException {
-        String end = "--";
-        String start = "--";
+    public static final int GET = 0x11111;
+    public static final int POST = 0x2222;
 
-        byte[] byetContent = getTextContent(boundary, textSet);
-        int contentLength = byetContent.length;
-        contentLength += getFileSize(boundary, fileMap);
-
-        connection.setRequestProperty("Content-Length", "" + contentLength);
-        // connection.setRequestProperty("Transfer-Encoding", "chunked");
-        connection.connect();// 开始连接
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            return;
+    public static HttpURLConnection Build(String urlStr, HashMap<String, String> prames, int method,long RangeStart,long RangeEnd) {
+        HttpURLConnection connection =getConnection(urlStr, prames);
+        switch (method) {
+            case GET:
+                return getHttpURLConnection(connection, null,RangeStart,RangeEnd);
+            case POST:
+                return postHttpURLConnection(connection, boundary, null);
+            default:
+                return connection;
         }
-        DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-
-        outputStream.write(byetContent);
-
-        int current_length = byetContent.length;
-        if (updataProgress != null)
-            updataProgress.Progress(contentLength, current_length);
-        byetContent = null;// 尽快的放出内存
-        // =======================================华丽的分割线
-
-        StringBuffer textContent = new StringBuffer(end);
-        for (String key : fileMap.keySet()) {
-            textContent.append(boundary);
-            textContent.append("Content-Disposition: form-data; name=\"" + key + "\"");
-            textContent.append(end);
-            // textContent.append("Content-Type: application/octet-stream");
-            textContent.append("Content-Type: multipart/form-data");
-            textContent.append(end);
-
-            byte[] fileText = textContent.toString().getBytes("utf-8");
-            outputStream.write(fileText);
-
-            current_length += fileText.length;
-
-            File file = fileMap.get(key);
-            RandomAccessFile raf = new RandomAccessFile(file, "rwd");
-            byte[] buffer = new byte[1024 * 5];// 这代表每5KB才走一个进度
-            int len = -1;
-            while (((len = raf.read(buffer)) > 0)) {
-                outputStream.write(buffer, 0, len);
-                current_length += len;
-                if (updataProgress != null)
-                    updataProgress.Progress(contentLength, current_length);
-            }
-            raf.close();
-        }
-        outputStream.write(boundary.getBytes());// 这根分割线没有算入进度条中 因为我懒^_^
-        outputStream.close();
-        connection.disconnect();
-        if (updataProgress != null)
-            updataProgress.Progress(contentLength, contentLength);// 写入完成
+    }
+    public static HttpURLConnection BuildGetRange(String urlStr, HashMap<String, String> prames,long RangeStart,long RangeEnd) {
+        HttpURLConnection connection =getConnection(urlStr, prames);
+        return getHttpURLConnection(connection, null,RangeStart,RangeEnd);
+    }
+    public static HttpURLConnection BuildGet(String urlStr, HashMap<String, String> prames) {
+        HttpURLConnection connection =getConnection(urlStr, prames);
+        return getHttpURLConnection(connection, null,0,0);
+    }
+    public static HttpURLConnection BuildPost(String urlStr, HashMap<String, String> prames) {
+        HttpURLConnection connection =getConnection(urlStr, prames);
+        return postHttpURLConnection(connection, boundary, null);
     }
 
     /**
