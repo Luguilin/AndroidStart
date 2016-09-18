@@ -2,6 +2,7 @@ package lgl.androidstart.tool;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +85,22 @@ public class StringHelper {
         Pattern p = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_-]{0,}$");
         Matcher m = p.matcher(s);
         return m.matches();
+    }
+
+    /**
+     * 获取随机字符串
+     * @param len 字符串的长度
+     * @return
+     */
+    public static String getRandomString(int len) {
+        String returnStr = "";
+        char[] ch = new char[len];
+        Random rd = new Random();
+        for (int i = 0; i < len; i++) {
+            ch[i] = (char) (rd.nextInt(9)+97);
+        }
+        returnStr = new String(ch);
+        return returnStr;
     }
 
 }

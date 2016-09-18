@@ -270,6 +270,28 @@ public class DateHelper {
         }
     }
 
+
+    /**
+     * 从生日获得岁
+     * @param birthStr
+     * @param pattern
+     * @return   18岁
+     */
+    public static String getAgeFormBirth(String birthStr, String... pattern){
+        int age;
+        Date now = parse(birthStr,pattern);
+        Date date =parse(getNowTime(pattern));
+        long l = date.getTime() - now.getTime();
+        long day = l/(24*60*60*1000);
+        if (day%365 == 0) {
+            age = (int) (day/365);
+        }else{
+            age = (int) (day/365)+1;
+        }
+
+        return String.valueOf(age)+" 岁";
+    }
+
     // SimpleDateFormat函数语法：
     // G 年代标志符
     // y 年

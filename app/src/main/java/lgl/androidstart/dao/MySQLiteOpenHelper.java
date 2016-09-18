@@ -65,7 +65,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
             db.execSQL("drop table if exists user");//确保之前的表不存在
 
-            db.execSQL("create table if not exists user(id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(10), remark varchar(50), age varchar(10))");//新建表
+//            db.execSQL("create table if not exists user(id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(10), remark varchar(50), age varchar(10))");//新建表
+            onCreate(db);//新建表
 
             db.execSQL("insert into user select id, name, remark, 'age_lala' from temp_user");//数据放回
 
