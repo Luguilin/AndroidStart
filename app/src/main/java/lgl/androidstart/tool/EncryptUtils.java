@@ -1,6 +1,7 @@
 package lgl.androidstart.tool;
 
 import java.security.MessageDigest;
+import java.util.UUID;
 
 /**
  * @author LGL
@@ -77,4 +78,10 @@ public class EncryptUtils {
     }
 
 
+    public static String getMyUUID() {
+        UUID uuidtemp = UUID.randomUUID();
+        String uniqueId = uuidtemp.toString();
+        return uniqueId;
+    }
+//要添加一个JAVA的XML解析
 }

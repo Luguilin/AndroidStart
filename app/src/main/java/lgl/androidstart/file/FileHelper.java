@@ -7,6 +7,8 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -191,5 +193,43 @@ public class FileHelper {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static void copyFile(String path1, String path2) {
+        File fromFile = new File(path1);
+        File toFile = new File(path2);
+        boolean rewrite = false;
+        if (!fromFile.exists()) {
+            return;
+        }
+        if (!fromFile.isFile()) {
+            return;
+        }
+        if (!fromFile.canRead()) {
+            return;
+        }
+        if (!toFile.getParentFile().exists()) {
+            toFile.getParentFile().mkdirs();
+        }
+        if (toFile.exists() && rewrite) {
+            toFile.delete();
+        }
+        try {
+            java.io.FileInputStream fosfrom = new java.io.FileInputStream(
+                    fromFile);
+            java.io.FileOutputStream fosto = new FileOutputStream(toFile);
+            byte bt[] = new byte[1024];
+            int c;
+            while ((c = fosfrom.read(bt)) > 0) {
+                fosto.write(bt, 0, c); // 将内容写到新文件当中
+            }
+            fosfrom.close();
+            fosto.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
