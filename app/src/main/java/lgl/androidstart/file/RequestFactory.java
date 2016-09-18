@@ -1,7 +1,9 @@
-package lgl.androidstart.http;
+package lgl.androidstart.file;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -14,12 +16,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 import lgl.androidstart.tool.L;
 
 /**
  * @author LGL
- * @description  做Http的配置
+ * @description 做Http的配置
  */
 public class RequestFactory {
 
@@ -42,7 +45,7 @@ public class RequestFactory {
      */
 
     public static String getPramesString(HashMap<String, String> prams, String encode) {
-        if (prams==null)return "";
+        if (prams == null) return "";
         StringBuffer buffer = new StringBuffer("?");
         for (String key : prams.keySet()) {
             try {
@@ -140,14 +143,13 @@ public class RequestFactory {
      * @return
      */
     /**
-     *
      * @param connection 链接对象
-     * @param cookie 没有cookie可以传null
+     * @param cookie     没有cookie可以传null
      * @param RangeStart 开始位置
-     * @param RangeEnd 结束位置
+     * @param RangeEnd   结束位置
      * @return 配置好的httprulconnction对象
      */
-    public static HttpURLConnection getHttpURLConnection(HttpURLConnection connection, String cookie,long RangeStart,long RangeEnd) {
+    public static HttpURLConnection getHttpURLConnection(HttpURLConnection connection, String cookie, long RangeStart, long RangeEnd) {
 //        connection.setDoOutput(true);
         connection.setDoInput(true);
         connection.setUseCaches(false);// 不缓存 可以的得到进度
@@ -163,21 +165,20 @@ public class RequestFactory {
         connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
         connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
         connection.setRequestProperty("Charset", "UTF-8");
-        String rangeStr="";
-        if (RangeStart>0){//bytes=154-456
-            rangeStr="bytes="+RangeStart+"-";
-            if (RangeEnd>0)rangeStr+=RangeEnd;
+        String rangeStr = "";
+        if (RangeStart > 0) {//bytes=154-456
+            rangeStr = "bytes=" + RangeStart + "-";
+            if (RangeEnd > 0) rangeStr += RangeEnd;
             connection.setRequestProperty("Range", rangeStr);
         }
-        connection.setRequestProperty("Accept-Encoding", "deflate,sdch");//gzip,
+        connection.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");//gzip,
         if (cookie != null)
             connection.addRequestProperty("Cookie", cookie);
         return connection;
     }
 
 
-
-    private static HttpURLConnection getConnection(String urlStr, HashMap<String, String> prames){
+    private static HttpURLConnection getConnection(String urlStr, HashMap<String, String> prames) {
         urlStr += getPramesString(prames, "utf-8");
 
         if (deBug) L.i(urlStr);
@@ -196,27 +197,30 @@ public class RequestFactory {
     public static final int GET = 0x11111;
     public static final int POST = 0x2222;
 
-    public static HttpURLConnection Build(String urlStr, HashMap<String, String> prames, int method,long RangeStart,long RangeEnd) {
-        HttpURLConnection connection =getConnection(urlStr, prames);
+    public static HttpURLConnection Build(String urlStr, HashMap<String, String> prames, int method, long RangeStart, long RangeEnd) {
+        HttpURLConnection connection = getConnection(urlStr, prames);
         switch (method) {
             case GET:
-                return getHttpURLConnection(connection, null,RangeStart,RangeEnd);
+                return getHttpURLConnection(connection, null, RangeStart, RangeEnd);
             case POST:
                 return postHttpURLConnection(connection, boundary, null);
             default:
                 return connection;
         }
     }
-    public static HttpURLConnection BuildGetRange(String urlStr, HashMap<String, String> prames,long RangeStart,long RangeEnd) {
-        HttpURLConnection connection =getConnection(urlStr, prames);
-        return getHttpURLConnection(connection, null,RangeStart,RangeEnd);
+
+    public static HttpURLConnection BuildGetRange(String urlStr, HashMap<String, String> prames, long RangeStart, long RangeEnd) {
+        HttpURLConnection connection = getConnection(urlStr, prames);
+        return getHttpURLConnection(connection, null, RangeStart, RangeEnd);
     }
+
     public static HttpURLConnection BuildGet(String urlStr, HashMap<String, String> prames) {
-        HttpURLConnection connection =getConnection(urlStr, prames);
-        return getHttpURLConnection(connection, null,0,0);
+        HttpURLConnection connection = getConnection(urlStr, prames);
+        return getHttpURLConnection(connection, null, 0, 0);
     }
+
     public static HttpURLConnection BuildPost(String urlStr, HashMap<String, String> prames) {
-        HttpURLConnection connection =getConnection(urlStr, prames);
+        HttpURLConnection connection = getConnection(urlStr, prames);
         return postHttpURLConnection(connection, boundary, null);
     }
 
@@ -278,5 +282,65 @@ public class RequestFactory {
     public interface UpdataProgress {
         public void Progress(int contentLength, int current_length);
     }
+
+
+    public static final String ContentLength = "Content-Length";
+    public static final String ContentType = "Content-Type";
+    public static final String ContentEncoding = "Content-Encoding";
+
+    /**
+     * @param connection
+     * @param headerStr  响应头中的Key（一般就是上面三个常用）
+     * @return
+     */
+    public static String getHeader(HttpURLConnection connection, String headerStr) {
+        return connection.getHeaderField(headerStr);
+    }
+
+    /**
+     * @param connection
+     * @param headerStr   响应头中的Key
+     * @param containsStr gzip，html text 等
+     * @return
+     */
+    public static boolean getHeader(HttpURLConnection connection, String headerStr, String containsStr) {
+        String h = connection.getHeaderField(headerStr);
+        return h != null || h.toLowerCase().contains(containsStr);
+    }
+
+    /**
+     * 该请求是否返回Gzip格式
+     *
+     * @param connection
+     * @return
+     */
+    public static boolean isGzip(HttpURLConnection connection) {
+        return getHeader(connection, ContentEncoding, "gzip");
+    }
+
+    /**
+     * 将一个流传入，如果是GZip压缩过的将处理为GZIPInputStream
+     * @param inputStream
+     * @return
+     */
+    public static InputStream isGzip2(InputStream inputStream) {
+        // 取前两个字节
+        byte[] header = new byte[2];
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        bis.mark(2);
+        try {
+            int result = bis.read(header);
+            // reset输入流到开始位置
+            bis.reset();
+            // 判断是否是GZIP格式
+            int ss = (header[0] & 0xff) | ((header[1] & 0xff) << 8);
+            if (result != -1 && ss == GZIPInputStream.GZIP_MAGIC)
+                return new GZIPInputStream(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bis;
+    }
+
 
 }

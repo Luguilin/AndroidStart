@@ -17,14 +17,12 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import lgl.androidstart.http.RequestFactory;
-
 /**
  * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
  *
  * @description
  */
-public class IOHelper {
+public class IOHelper implements LIO{
 
     /**
      * 从制定路径读入流
@@ -147,6 +145,7 @@ public class IOHelper {
         }
         return inputStream;
     }
+
 
     public interface wirteHowLenghtListener {
         /**

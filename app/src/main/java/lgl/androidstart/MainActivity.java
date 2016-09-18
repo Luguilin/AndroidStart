@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 
 import lgl.androidstart.file.FileHelper;
 import lgl.androidstart.file.IOHelper;
+import lgl.androidstart.http.MyGZIP;
 import lgl.androidstart.http.RequestFactory;
 import lgl.androidstart.tool.L;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String urlstr = "http://www.cnblogs.com/hoojo/archive/2011/09/30/2196767.html";
+                String urlstr = "https://www.nuomi.com/?cid=002540";
 //                String urlstr = "http://116.224.87.17/apk.r1.market.hiapk.com/data/upload/apkres/2016/8_31/15/com.zuilot.liaoqiuba_033120.apk";
 //                String urlstr = "https://github.com/Luguilin/Document/blob/master/RxJava/RxJava%20on%20Android.pdf";
 //                HttpURLConnection connection=RequestFactory.BuildGet(urlstr,null);
@@ -46,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
                     L.e("length:"+connection.getContentLength());
                     String path=FileHelper.getExternalSdCardPath()+File.separator+"aaa/RxJava.html";
                     L.e(path);
-                    IOHelper.WirteFile(inputStream,path );
+//                    IOHelper.WirteFile(inputStream,path );
+                    String temp=IOHelper.ReadString4Stream(inputStream).toString();
+                    String s=new String(MyGZIP.unZip(temp.getBytes()));
+                    L.e(s);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
