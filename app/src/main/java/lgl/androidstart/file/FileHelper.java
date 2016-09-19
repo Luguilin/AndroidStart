@@ -49,14 +49,13 @@ public class FileHelper {
      * @return
      */
     public static File getFile(String file_path, boolean delete) {
-        File file = null;
+        File file = new File(file_path);
         try {
-            file = new File(file_path);
-            if (file.getParentFile() == null || !file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();// 创建文件夹
-                if (!file.exists()) {
-                    file.createNewFile();// 创建一个新文件
+            if (!file.exists()) {
+                if (!file.getParentFile().exists()|file.getParentFile() == null) {
+                    file.getParentFile().mkdirs();// 创建文件夹
                 }
+                file.createNewFile();// 创建一个新文件
             } else if (delete) {//需要覆盖
                 file.delete();
                 file.createNewFile();
@@ -68,24 +67,13 @@ public class FileHelper {
     }
 
     /**
-     * 能够保证文件或文件夹的存在
+     * 根据文件名获得一个空文件
      *
      * @param file
      * @return
      */
-    public static boolean existFile(File file) {
-        synchronized (file) {//这里加入线程的锁定来防止多线程同事执行此步骤
-            if (file.exists()) return true;
-            file.getParentFile().mkdirs();
-            try {
-                if (!file.exists())
-                    file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        }
+    public static File getFile(File file) {
+        return getFile(file.getAbsolutePath(), true);
     }
 
     /**
@@ -102,6 +90,10 @@ public class FileHelper {
         String path = getDiskCacheDir(context, cacheDir).getAbsolutePath();
         File file = getFile(path + File.separatorChar + file_name, true);
         return file;
+    }
+
+    public static String getExternalSdFile(String file_name) {
+        return getExternalSdCardPath() + File.separator + file_name;
     }
 
     /**
@@ -199,13 +191,13 @@ public class FileHelper {
         File fromFile = new File(path1);
         File toFile = new File(path2);
         boolean rewrite = false;
-        if (!fromFile.exists()) {
+        if (!fromFile.exists()) {//存在
             return;
         }
-        if (!fromFile.isFile()) {
+        if (!fromFile.isFile()) {//是文件
             return;
         }
-        if (!fromFile.canRead()) {
+        if (!fromFile.canRead()) {//能读
             return;
         }
         if (!toFile.getParentFile().exists()) {
@@ -230,6 +222,5 @@ public class FileHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

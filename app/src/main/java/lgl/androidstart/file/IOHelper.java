@@ -17,12 +17,14 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import lgl.androidstart.http.RequestFactory;
+
 /**
  * 作者: LGL on 2016/8/8. 邮箱: 468577977@qq.com
  *
  * @description
  */
-public class IOHelper implements LIO{
+public class IOHelper implements LIO {
 
     /**
      * 从制定路径读入流
@@ -75,8 +77,7 @@ public class IOHelper implements LIO{
      * @param path      要写入的文件名  包含文件名
      */
     public static void WirteByteArray(byte[] byteArray, String path) {
-        File file = new File(path);
-        FileHelper.existFile(file);
+        File file = FileHelper.getFile(path,true);
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(byteArray);
         byte[] buffer = new byte[1024];
         int len = 0;
@@ -104,27 +105,24 @@ public class IOHelper implements LIO{
      * 写入流到SD卡
      *
      * @param inputStream 目标流
-     * @param file_path   要写入的文件名
+     * @param path   要写入的文件名
      */
-    public static void WirteFile(InputStream inputStream, String file_path) {
-        File file = new File(file_path);
-        FileHelper.existFile(file);
+    public static void WirteFile(InputStream inputStream, String path) {
+        File file =FileHelper.getFile(path,true);
         try {
             RandomAccessFile raf = new RandomAccessFile(file, "rwd");//"r", "rw", "rws", or "rwd"
             byte[] buffer = new byte[1024];
             int len = 0;
-            try {
-                while ((len = inputStream.read(buffer)) > 0) {
-                    raf.write(buffer, 0, len);
-                }
-                raf.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-
+            while ((len = inputStream.read(buffer)) > 0) {
+                raf.write(buffer, 0, len);
             }
+            raf.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (file.length() < 1) file.delete();//写入失败，将其删除
         }
     }
 
@@ -145,7 +143,6 @@ public class IOHelper implements LIO{
         }
         return inputStream;
     }
-
 
     public interface wirteHowLenghtListener {
         /**
@@ -194,9 +191,8 @@ public class IOHelper implements LIO{
     }
 
     public static void RandomWirte(byte[] buffer, String file_path, int start) {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
-        File target = new File(file_path);
-        FileHelper.existFile(target);
+//        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
+        File target = FileHelper.getFile(file_path,true);
         try {
             RandomAccessFile raf = new RandomAccessFile(target, "rwd");
             raf.setLength(buffer.length);
@@ -263,4 +259,6 @@ public class IOHelper implements LIO{
             e.printStackTrace();
         }
     }
+
+
 }

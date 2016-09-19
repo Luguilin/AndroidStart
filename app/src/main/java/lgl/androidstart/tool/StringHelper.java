@@ -19,7 +19,7 @@ public class StringHelper {
      * @return 是空的
      */
     public static Boolean isEmpty(String s) {
-        if (s == null || s.length() < 1 || s.equals("")||s.equals("null")|| s.equals("[null]")) {
+        if (s == null || s.length() < 1 || s.equals("") || s.equals("null") || s.equals("[null]")) {
             return true;
         }
         return false;
@@ -67,7 +67,6 @@ public class StringHelper {
     }
 
 
-
     /**
      * 根据URL截取文件名  eg:aaa.jpg
      *
@@ -89,6 +88,7 @@ public class StringHelper {
 
     /**
      * 获取随机字符串
+     *
      * @param len 字符串的长度
      * @return
      */
@@ -97,10 +97,23 @@ public class StringHelper {
         char[] ch = new char[len];
         Random rd = new Random();
         for (int i = 0; i < len; i++) {
-            ch[i] = (char) (rd.nextInt(9)+97);
+            ch[i] = (char) (rd.nextInt(9) + 97);
         }
         returnStr = new String(ch);
         return returnStr;
+    }
+
+
+    /**
+     * 获得名字不包含文件
+     *
+     * @param file_name eg:  aa.txt  -->  aa
+     *                  eg:   aa.txt.gz   --->  aa.txt
+     * @return 文件名
+     */
+    public static String getName4FileName(String file_name) {
+        if (!file_name.contains(".")) return "temp_" + Math.random();
+        else return file_name.substring(0, file_name.lastIndexOf("."));
     }
 
 }
