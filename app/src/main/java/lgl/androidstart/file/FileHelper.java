@@ -18,6 +18,8 @@ import java.util.Date;
 /**
  * @author LGL on 2016/8/8.
  * @description
+ * @permission  WRITE_EXTERNAL_STORAGE
+ *
  */
 public class FileHelper {
     /**

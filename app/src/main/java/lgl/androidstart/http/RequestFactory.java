@@ -20,6 +20,7 @@ import lgl.androidstart.tool.L;
 /**
  * @author LGL
  * @description 做Http的配置
+ * @permission   INTERNET
  */
 public class RequestFactory {
 
