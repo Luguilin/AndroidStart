@@ -75,8 +75,7 @@ public class ImageHelper {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         //开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
-
+        BitmapFactory.decodeFile(srcPath, newOpts);//此时返回bm为空
         newOpts.inJustDecodeBounds = false;
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -90,18 +89,14 @@ public class ImageHelper {
         } else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
             be = (int) (newOpts.outHeight / hh);
         }
-        if (be <= 0)
-            be = 1;
+        if (be <= 0) be = 1;
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-        bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
+        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 
-
-
     void DDD() {
-
         /**
          * BitmapFactory中有好生成位图的方法
          */
@@ -152,14 +147,14 @@ public class ImageHelper {
     }
 
     // Bitmap --> byte[]
-    byte[] Bitmap2Bytes(Bitmap bm) {
+    public static byte[] Bitmap2Bytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
     }
 
     // byte[] --> Bitmap
-    Bitmap Bytes2Bimap(byte[] b) {
+    public static Bitmap Bytes2Bimap(byte[] b) {
         if (b.length != 0) {
             return BitmapFactory.decodeByteArray(b, 0, b.length);
         } else {

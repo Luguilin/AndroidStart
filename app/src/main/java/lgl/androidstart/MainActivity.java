@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import lgl.androidstart.simple.BaseSimple;
-import lgl.androidstart.simple.GZipSimple;
+import lgl.androidstart.simple.ImageSimple;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSimple=new GZipSimple();
+//        mSimple=new GZipSimple();
+        mSimple=new ImageSimple();
 
 
 
