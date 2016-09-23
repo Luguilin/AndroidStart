@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 //        mSimple=new GZipSimple();
 //        mSimple=new ImageSimple();
 
-        handler.sendEmptyMessageDelayed(0,2000);
+//        handler.sendEmptyMessageDelayed(0,2000);
 
 //        mSimple.Main();
     }

@@ -1,13 +1,16 @@
 package lgl.androidstart.tool;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Window;
 
 /**
  * @author LGL
@@ -54,6 +57,24 @@ public class AppHelper {
         return 1;
     }
 
+    /**
+     * 获得状态栏高度
+     *
+     * @return
+     */
+    private int getStatusBarHeight(Activity activity) {
+        Rect rectangle = new Rect();
+        Window window = activity.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.top;
+        if (statusBarHeight == 0) {
+            int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
+            }
+        }
+        return statusBarHeight;
+    }
 
 //	long memory=Runtime.getRuntime().maxMemory();//获取系统分配的最大内存      单位是   KB
 //
