@@ -44,9 +44,7 @@ public class ImageSizeUtil {
     public static ImageSize getImageViewSize(ImageView imageView) {
 
         ImageSize imageSize = new ImageSize();
-        DisplayMetrics displayMetrics = imageView.getContext().getResources()
-                .getDisplayMetrics();
-
+        DisplayMetrics displayMetrics = imageView.getContext().getResources().getDisplayMetrics();
 
         LayoutParams lp = imageView.getLayoutParams();
 

@@ -24,7 +24,7 @@ import lgl.androidstart.http.RequestFactory;
  *
  * @description
  */
-public class IOHelper implements LIO {
+public class IOHelper{
 
     /**
      * 从制定路径读入流
@@ -259,6 +259,4 @@ public class IOHelper implements LIO {
             e.printStackTrace();
         }
     }
-
-
 }

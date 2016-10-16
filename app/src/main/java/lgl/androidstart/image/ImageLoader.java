@@ -390,4 +390,19 @@ public class ImageLoader {
         ImageView imageView;
         String path;
     }
+
+    /**
+     * 获取图片的尺寸   【0】width   【1】height
+     * @param path
+     * @return
+     */
+    public static int[] getImageSize(String path) {
+        int[] size = new int[2];
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        size[0] = options.outWidth;
+        size[1] = options.outHeight;
+        return size;
+    }
 }

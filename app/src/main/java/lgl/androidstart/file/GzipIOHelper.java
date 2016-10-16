@@ -13,7 +13,7 @@ import lgl.androidstart.tool.L;
 /**
  * Created by LGL on 2016/9/18.
  */
-public class GzipIOHelper implements LIO {
+public class GzipIOHelper{
 
     public String convertGzipStr(String str) {
         return "";

@@ -1,14 +1,5 @@
 package lgl.androidstart.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -25,6 +16,14 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Tools for handler picture
@@ -43,9 +42,7 @@ public final class ImageTools {
 	public static Bitmap drawableToBitmap(Drawable drawable) {
 		int w = drawable.getIntrinsicWidth();
 		int h = drawable.getIntrinsicHeight();
-
-		Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Config.ARGB_8888
-				: Config.RGB_565;
+		Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Config.ARGB_8888: Config.RGB_565;
 		Bitmap bitmap = Bitmap.createBitmap(w, h, config);
 		Canvas canvas = new Canvas(bitmap);
 		drawable.setBounds(0, 0, w, h);
@@ -70,8 +67,7 @@ public final class ImageTools {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Bitmap inputStreamToBitmap(InputStream inputStream)
-			throws Exception {
+	public static Bitmap inputStreamToBitmap(InputStream inputStream){
 		return BitmapFactory.decodeStream(inputStream);
 	}
 
@@ -83,8 +79,7 @@ public final class ImageTools {
 	 */
 	public static Bitmap byteToBitmap(byte[] byteArray) {
 		if (byteArray.length != 0) {
-			return BitmapFactory
-					.decodeByteArray(byteArray, 0, byteArray.length);
+			return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 		} else {
 			return null;
 		}
@@ -164,11 +159,9 @@ public final class ImageTools {
 		Matrix matrix = new Matrix();
 		matrix.preScale(1, -1);
 
-		Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w,
-				h / 2, matrix, false);
+		Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w,h / 2, matrix, false);
 
-		Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2),
-				Config.ARGB_8888);
+		Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2),Config.ARGB_8888);
 
 		Canvas canvas = new Canvas(bitmapWithReflection);
 		canvas.drawBitmap(bitmap, 0, 0, null);
