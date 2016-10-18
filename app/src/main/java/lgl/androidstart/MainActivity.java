@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import lgl.androidstart.simple.BaseSimple;
 
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 //        handler.sendEmptyMessageDelayed(0,2000);
 
 //        mSimple.Main();
+    }
+    public void BtnClick(View view){
+
     }
     Handler handler=new Handler(){
         @Override
