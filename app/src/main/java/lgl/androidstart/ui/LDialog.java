@@ -29,6 +29,13 @@ public class LDialog {
         	alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.setCancelable(false);
 		}
+        setOnclickListener(R.id.negativeButton, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         return alertDialog;
     }
 
