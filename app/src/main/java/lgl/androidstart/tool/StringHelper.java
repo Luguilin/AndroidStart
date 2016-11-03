@@ -2,6 +2,7 @@ package lgl.androidstart.tool;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,6 +115,18 @@ public class StringHelper {
     public static String getName4FileName(String file_name) {
         if (!file_name.contains(".")) return "temp_" + Math.random();
         else return file_name.substring(0, file_name.lastIndexOf("."));
+    }
+
+    public static String convertNumber2WanString(double number){
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");//格式化设置#,##0.00
+        if (number>10000){
+            number=number/10000;
+
+            return decimalFormat.format(number)+"万";
+        }else{
+            return decimalFormat.format(number)+"";
+        }
+
     }
 
 }

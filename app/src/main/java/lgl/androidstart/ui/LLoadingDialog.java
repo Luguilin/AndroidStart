@@ -11,10 +11,16 @@ import lgl.androidstart.R;
 
 public class LLoadingDialog {
 
-    public static void showLoadingDialog(Activity activity){
-        Dialog dialog = new Dialog(activity, R.style.dialog);
+    Dialog dialog;
+    public void showLoadingDialog(Activity activity){
+        dialog = new Dialog(activity, R.style.dialog);
         dialog.setContentView(R.layout.progress_dialog);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
     }
+    public void dismissLoadinDialog(){
+        if (dialog!=null)if (dialog.isShowing())dialog.dismiss();
+    }
+
 }
