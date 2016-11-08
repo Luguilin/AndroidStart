@@ -76,6 +76,11 @@ public class LDialog {
         if (alertDialog.isShowing()) return;
         alertDialog.show();
     }
+    public void dismiss() {
+        if (alertDialog == null) return;
+        if (alertDialog.isShowing()) alertDialog.dismiss();
+    }
+
 
     class DialogOnclickListener implements View.OnClickListener {
         DialogInterface.OnClickListener onClickListener;
