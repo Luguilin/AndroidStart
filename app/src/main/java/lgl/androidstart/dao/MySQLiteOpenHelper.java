@@ -41,7 +41,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         L.i("==========","我数据库执行了版本升级       "+newVersion+"------》"+newVersion);
         //因为升级的时候有可能添加一些东西或修改一些，所以需要把数据备份到另一张表中  升级好了之后再存回来
         try {
-            // // 备份数据库到SD卡的/aDBTest/DBTest.db
+            //  备份数据库到SD卡的/aDBTest/DBTest.db
             // CopyDB2SD();
             for (int i = oldVersion; i < newVersion; i++) {//假如用户一直使用很老的APP版本   而数据库已经更新了好几个版本   所以这里要这样来循环跟新
                 switch (i) {
