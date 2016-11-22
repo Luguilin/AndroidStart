@@ -87,4 +87,10 @@ public class ContentType {
 		MimeTypeMap.put("sisx", "application/vnd.symbian.install");
 		
 	}
+	public static String getContentType(String type){
+		String tempType=MimeTypeMap.get(type);
+		if (tempType==null||tempType.length()<1)return "application/octet-stream";
+		return tempType;
+	}
+
 }
