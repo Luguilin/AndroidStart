@@ -19,6 +19,7 @@ public class DateHelper {
     public static final String DATE_SMALL_STR = "yyyy-MM-dd";
     public static final String DATE_KEY_STR = "yyMMddHHmmss";
     public static final String DATE_SHOT_STR = "HH:mm:ss";
+    public static final String DATE_SHOT2_STR = "HH:mm";
 
     /**
      * 将字符串转换为Date

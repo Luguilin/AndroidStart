@@ -38,6 +38,15 @@ public class AppHelper {
         return versionName;
     }
 
+    /**
+     * 获得安卓系统版本
+     * @return
+     */
+    public static String getAndroidVersion(){
+        String remark = android.os.Build.VERSION.RELEASE;
+        return remark;
+    }
+
     // <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     // 需要添加权限
     @SuppressWarnings("static-access")
