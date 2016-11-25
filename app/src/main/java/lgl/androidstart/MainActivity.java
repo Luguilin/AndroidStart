@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 //        handler.sendEmptyMessageDelayed(0,2000);
 
 //        mSimple.Main();
+
     }
     Handler handler=new Handler(){
         @Override

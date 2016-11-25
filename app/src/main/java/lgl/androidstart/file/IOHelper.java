@@ -24,7 +24,7 @@ import lgl.androidstart.http.RequestFactory;
  *
  * @description
  */
-public class IOHelper{
+public class IOHelper {
 
     /**
      * 从制定路径读入流
@@ -77,7 +77,7 @@ public class IOHelper{
      * @param path      要写入的文件名  包含文件名
      */
     public static void WirteByteArray(byte[] byteArray, String path) {
-        File file = FileHelper.getFile(path,true);
+        File file = FileHelper.getFile(path, true);
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(byteArray);
         byte[] buffer = new byte[1024];
         int len = 0;
@@ -92,12 +92,7 @@ public class IOHelper{
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (fileWriter != null)
-                    fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtils.Close(fileWriter);
         }
     }
 
@@ -105,10 +100,10 @@ public class IOHelper{
      * 写入流到SD卡
      *
      * @param inputStream 目标流
-     * @param path   要写入的文件名
+     * @param path        要写入的文件名
      */
     public static void WirteFile(InputStream inputStream, String path) {
-        File file =FileHelper.getFile(path,true);
+        File file = FileHelper.getFile(path, true);
         try {
             RandomAccessFile raf = new RandomAccessFile(file, "rwd");//"r", "rw", "rws", or "rwd"
             byte[] buffer = new byte[1024];
@@ -182,17 +177,13 @@ public class IOHelper{
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (raf != null) raf.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            IOUtils.Close(raf);
         }
     }
 
     public static void RandomWirte(byte[] buffer, String file_path, int start) {
 //        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buffer);
-        File target = FileHelper.getFile(file_path,true);
+        File target = FileHelper.getFile(file_path, true);
         try {
             RandomAccessFile raf = new RandomAccessFile(target, "rwd");
             raf.setLength(buffer.length);
