@@ -25,12 +25,12 @@ import lgl.androidstart.tool.L;
  */
 public class HttpSimple implements BaseSimple{
 
+    String urlstr="http://apis.juhe.cn/mobile/get";
     @Override
     public void Main() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String urlstr = "https://www.nuomi.com/?cid=002540";
                 HttpURLConnection connection = RequestFactory.BuildGet(urlstr, null);
                 try {
                     connection.connect();

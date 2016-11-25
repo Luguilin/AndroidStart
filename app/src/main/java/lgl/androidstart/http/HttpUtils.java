@@ -23,66 +23,6 @@ public class HttpUtils
 		void onRequestComplete(String result);
 	}
 
-
-	/**
-	 * 异步的Get请求
-	 * 
-	 * @param urlStr
-	 * @param callBack
-	 */
-	public static void doGetAsyn(final String urlStr, final CallBack callBack)
-	{
-		new Thread()
-		{
-			public void run()
-			{
-				try
-				{
-					String result = doGet(urlStr);
-					if (callBack != null)
-					{
-						callBack.onRequestComplete(result);
-					}
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-
-			};
-		}.start();
-	}
-
-	/**
-	 * 异步的Post请求
-	 * @param urlStr
-	 * @param params
-	 * @param callBack
-	 * @throws Exception
-	 */
-	public static void doPostAsyn(final String urlStr, final String params,
-			final CallBack callBack) throws Exception
-	{
-		new Thread()
-		{
-			public void run()
-			{
-				try
-				{
-					String result = doPost(urlStr, params);
-					if (callBack != null)
-					{
-						callBack.onRequestComplete(result);
-					}
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-
-			};
-		}.start();
-
-	}
-
 	/**
 	 * Get请求，获得返回数据
 	 * 
@@ -92,13 +32,12 @@ public class HttpUtils
 	 */
 	public static String doGet(String urlStr) 
 	{
-		URL url = null;
 		HttpURLConnection conn = null;
 		InputStream is = null;
 		ByteArrayOutputStream baos = null;
 		try
 		{
-			url = new URL(urlStr);
+			URL url = new URL(urlStr);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setReadTimeout(TIMEOUT_IN_MILLIONS);
 			conn.setConnectTimeout(TIMEOUT_IN_MILLIONS);

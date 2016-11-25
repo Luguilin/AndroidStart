@@ -150,7 +150,7 @@ public class RequestFactory {
     public static HttpURLConnection getHttpURLConnection(HttpURLConnection connection, String cookie, long RangeStart, long RangeEnd) {
 //        connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setUseCaches(false);// 不缓存 可以的得到进度
+        connection.setUseCaches(false);// 不缓存 可以的得到进度(同时我们上传大文件的时候会导致内存溢出的问题，所以这里关闭缓存)
         // connection.setFixedLengthStreamingMode(contentLength);
         connection.setChunkedStreamingMode(0);//不分块
         try {

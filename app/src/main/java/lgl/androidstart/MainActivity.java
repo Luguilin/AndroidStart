@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 
 import lgl.androidstart.simple.BaseSimple;
+import lgl.androidstart.simple.HttpSimple;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,10 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
 //        mSimple=new GZipSimple();
 //        mSimple=new ImageSimple();
+        mSimple= new HttpSimple();
 
 //        handler.sendEmptyMessageDelayed(0,2000);
 
-//        mSimple.Main();
+        mSimple.Main();
+
 
     }
     Handler handler=new Handler(){
