@@ -19,7 +19,11 @@ public class LDialog {
     private View mConvertView;
     private Dialog alertDialog;
 
-    public Dialog CreateDailog(Context content, View contentView,boolean cancelable) {
+    public Dialog getDialog() {
+        return alertDialog;
+    }
+
+    public Dialog CreateDailog(Context content, View contentView, boolean cancelable) {
         this.mConvertView = contentView;
         mViews = new SparseArray<View>();
         alertDialog = new Dialog(content, R.style.Dialog);
@@ -82,6 +86,9 @@ public class LDialog {
     }
 
 
+    /**
+     * Dialog中点击事件的包装类
+     */
     class DialogOnclickListener implements View.OnClickListener {
         DialogInterface.OnClickListener onClickListener;
 
