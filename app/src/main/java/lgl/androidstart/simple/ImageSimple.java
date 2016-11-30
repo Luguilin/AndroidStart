@@ -1,5 +1,6 @@
 package lgl.androidstart.simple;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import lgl.androidstart.tool.L;
 public class ImageSimple implements BaseSimple{
 
     @Override
-    public void Main() {
+    public void Main(Activity context) {
         new Thread(new MyRun()).start();
     }
     class MyRun implements Runnable{

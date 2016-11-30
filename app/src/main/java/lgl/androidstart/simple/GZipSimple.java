@@ -1,5 +1,7 @@
 package lgl.androidstart.simple;
 
+import android.app.Activity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -17,7 +19,7 @@ import lgl.androidstart.tool.StringHelper;
  */
 public class GZipSimple implements BaseSimple{
     @Override
-    public void Main() {
+    public void Main(Activity context) {
         new Thread(new Runnable() {
             @Override
             public void run() {

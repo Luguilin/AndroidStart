@@ -1,12 +1,12 @@
 package lgl.androidstart;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import lgl.androidstart.simple.BaseSimple;
 import lgl.androidstart.simple.HttpSimple;
+import lgl.androidstart.tool.L;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,18 +19,12 @@ public class MainActivity extends AppCompatActivity {
 //        mSimple=new GZipSimple();
 //        mSimple=new ImageSimple();
         mSimple= new HttpSimple();
-
+        L.e("----:");
 //        handler.sendEmptyMessageDelayed(0,2000);
-
-        mSimple.Main();
 
 
     }
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            throw new RuntimeException();
-        }
-    };
+    public void Oncli(View view){
+        mSimple.Main(this);
+    }
 }

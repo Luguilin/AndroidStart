@@ -74,6 +74,7 @@ public class JsonHelper {
 	}
 
 	public static <T> T getModel4Json(String json, java.lang.reflect.Type type) {
+		if (StringHelper.isEmpty(json))return null;
 		Gson gson = new Gson();
 		try {
 			T t = gson.fromJson(json, type);
