@@ -152,7 +152,7 @@ public class RequestFactory {
         connection.setDoInput(true);
         connection.setUseCaches(false);// 不缓存 可以的得到进度(同时我们上传大文件的时候会导致内存溢出的问题，所以这里关闭缓存)
         // connection.setFixedLengthStreamingMode(contentLength);
-        connection.setChunkedStreamingMode(0);//不分块
+        connection.setChunkedStreamingMode(0);//不分块   默认大小为2MB   为了得到进度 我们不分块缓存
         try {
             connection.setRequestMethod("GET");
         } catch (ProtocolException e) {
@@ -176,8 +176,10 @@ public class RequestFactory {
     }
 
 
-    private static HttpURLConnection getConnection(String urlStr, HashMap<String, String> prames) {
-        urlStr += getPramesString(prames, "utf-8");
+    private static HttpURLConnection getConnection(String urlStr, HashMap<String, String> parameter) {
+        urlStr += getPramesString(parameter, "utf-8");
+
+        L.e(urlStr);
 
         if (deBug) L.i(urlStr);
         HttpURLConnection connection = null;
@@ -212,13 +214,13 @@ public class RequestFactory {
         return getHttpURLConnection(connection, null, RangeStart, RangeEnd);
     }
 
-    public static HttpURLConnection BuildGet(String urlStr, HashMap<String, String> prames) {
-        HttpURLConnection connection = getConnection(urlStr, prames);
+    public static HttpURLConnection BuildGet(String urlStr, HashMap<String, String> parameter) {
+        HttpURLConnection connection = getConnection(urlStr, parameter);
         return getHttpURLConnection(connection, null, 0, 0);
     }
 
-    public static HttpURLConnection BuildPost(String urlStr, HashMap<String, String> prames) {
-        HttpURLConnection connection = getConnection(urlStr, prames);
+    public static HttpURLConnection BuildPost(String urlStr, HashMap<String, String> parameter) {
+        HttpURLConnection connection = getConnection(urlStr, parameter);
         return postHttpURLConnection(connection, boundary, null);
     }
 

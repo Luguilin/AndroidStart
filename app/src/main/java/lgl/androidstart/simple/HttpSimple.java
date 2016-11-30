@@ -13,9 +13,7 @@ import java.net.ProtocolException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import lgl.androidstart.file.FileHelper;
 import lgl.androidstart.file.IOHelper;
-import lgl.androidstart.http.MyGZIP;
 import lgl.androidstart.http.RequestFactory;
 import lgl.androidstart.tool.L;
 
@@ -31,17 +29,21 @@ public class HttpSimple implements BaseSimple{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpURLConnection connection = RequestFactory.BuildGet(urlstr, null);
+                HashMap<String,String> parameter=new HashMap<String, String>();
+                parameter.put("phone","1889414");
+                parameter.put("key","378d6498179ff0355703e65dcd224113");
+                L.e("----"+RequestFactory.getPramesString(parameter,"utf-8"));
+                HttpURLConnection connection = RequestFactory.BuildGet(urlstr, parameter);
                 try {
                     connection.connect();
                     InputStream inputStream = connection.getInputStream();
                     L.e("length:" + connection.getContentLength());
-                    String path = FileHelper.getExternalSdCardPath() + File.separator + "aaa/RxJava.html";
-                    L.e(path);
+//                    String path = FileHelper.getExternalSdCardPath() + File.separator + "aaa/RxJava.html";
+//                    L.e(path);
 //                    IOHelper.WirteFile(inputStream,path );
                     String temp = IOHelper.ReadString4Stream(inputStream).toString();
-                    String s = new String(MyGZIP.unZip(temp.getBytes()));
-                    L.e(s);
+//                    String s = new String(MyGZIP.unZip(temp.getBytes()));
+                    L.e(temp);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

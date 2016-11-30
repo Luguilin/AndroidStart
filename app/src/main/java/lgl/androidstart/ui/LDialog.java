@@ -22,27 +22,10 @@ public class LDialog {
     private Dialog alertDialog;
 
     public LDialog() {
-
-//        this.mConvertView = LayoutInflater.from(context).inflate(layoutId,null,false);
-//        mViews = new SparseArray<View>();
-//        alertDialog = new Dialog(context, R.style.Dialog);
-//
-//        alertDialog.addContentView(mConvertView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        //alertDialog.setContentView(view);
-//
-//        alertDialog.setCanceledOnTouchOutside(false);
-//        alertDialog.setCancelable(false);
-//
-//        setOnclickListener(R.id.negativeButton, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
     }
-    public  Dialog CreateDailog(Context context, @LayoutRes int layoutId, boolean cancelable) {
-        this.mConvertView = LayoutInflater.from(context).inflate(layoutId,null,false);
+
+    public Dialog CreateDailog(Context context, @LayoutRes int layoutId, boolean cancelable) {
+        this.mConvertView = LayoutInflater.from(context).inflate(layoutId, null, false);
         mViews = new SparseArray<View>();
         alertDialog = new Dialog(context, R.style.Dialog);
         alertDialog.addContentView(mConvertView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -59,6 +42,11 @@ public class LDialog {
             }
         });
         return alertDialog;
+    }
+
+    public void setDismisListener(DialogInterface.OnDismissListener dismisListener){
+        if (dismisListener!=null)
+            alertDialog.setOnDismissListener(dismisListener);
     }
 
     public Dialog getDialog() {
@@ -91,8 +79,10 @@ public class LDialog {
         }
         return (T) v;
     }
+
     /**
      * 这是TextView文本
+     *
      * @param viewId
      * @param text
      * @return
@@ -107,6 +97,7 @@ public class LDialog {
         if (alertDialog.isShowing()) return;
         alertDialog.show();
     }
+
     public void dismiss() {
         if (alertDialog == null) return;
         if (alertDialog.isShowing()) alertDialog.dismiss();

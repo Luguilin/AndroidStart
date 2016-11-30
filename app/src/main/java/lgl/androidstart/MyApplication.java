@@ -3,7 +3,7 @@ package lgl.androidstart;
 import android.app.Application;
 import android.content.Context;
 
-import lgl.androidstart.test.CrashHandler;
+import lgl.androidstart.tool.T;
 
 /**
  * @author LGL on 2016/8/31.
@@ -17,8 +17,9 @@ public class MyApplication extends Application {
         super.onCreate();
         mContext = this;
 
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+        T.Instance(this,"");
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplicationContext());
 
     }
 
