@@ -154,8 +154,8 @@ public class DownloadHelper {
             long RangeStart = ints[i];
             long RangeEnd = ints[i + 1];
             Thread thread = new Thread(new DownloadTask(urlStr, target, RangeStart, RangeEnd, downloadListener));
-            thread.start();
             thread.setName(RangeStart + "---" + RangeEnd);
+            thread.start();
         }
         new Thread(new DownloadTask(urlStr, target, ints[ints.length - 1], length, downloadListener)).start();
     }

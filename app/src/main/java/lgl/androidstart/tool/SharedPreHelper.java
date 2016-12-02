@@ -57,18 +57,18 @@ public class SharedPreHelper {
      * @param defaultObject
      * @return
      */
-    public static Object get(Context context, String key, Object defaultObject) {
+    public static <T> T get(Context context, String key, Object defaultObject) {
         SharedPreferences sp = context.getSharedPreferences(SharedPre_NAME,Context.MODE_PRIVATE);
         if (defaultObject instanceof String) {
-            return sp.getString(key, (String) defaultObject);
+            return (T) sp.getString(key, (String) defaultObject);
         } else if (defaultObject instanceof Integer) {
-            return sp.getInt(key, (Integer) defaultObject);
+            return (T)(Integer)sp.getInt(key, (Integer) defaultObject);
         } else if (defaultObject instanceof Boolean) {
-            return sp.getBoolean(key, (Boolean) defaultObject);
+            return (T)(Boolean)sp.getBoolean(key, (Boolean) defaultObject);
         } else if (defaultObject instanceof Float) {
-            return sp.getFloat(key, (Float) defaultObject);
+            return (T)(Float)sp.getFloat(key, (Float) defaultObject);
         } else if (defaultObject instanceof Long) {
-            return sp.getLong(key, (Long) defaultObject);
+            return (T)(Long)sp.getLong(key, (Long) defaultObject);
         }
         return null;
     }
