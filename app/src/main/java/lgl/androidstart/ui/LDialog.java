@@ -34,18 +34,20 @@ public class LDialog {
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.setCancelable(false);
         }
-        setOnclickListener(R.id.negativeButton, new DialogInterface.OnClickListener() {
+        if (getView(R.id.negativeButton) != null) {
+            setOnclickListener(R.id.negativeButton, new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
         return alertDialog;
     }
 
-    public void setDismisListener(DialogInterface.OnDismissListener dismisListener){
-        if (dismisListener!=null)
+    public void setDismisListener(DialogInterface.OnDismissListener dismisListener) {
+        if (dismisListener != null)
             alertDialog.setOnDismissListener(dismisListener);
     }
 
