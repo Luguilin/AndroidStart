@@ -17,6 +17,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     protected Context mContext;
     protected List<T> mData;
     protected LayoutInflater mInflater;
+    protected int mPosition;
     int layoutId;
 
     public CommonAdapter(Context context, List<T> data, int layoutId) {
@@ -45,10 +46,9 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = ViewHolder.get(mContext, position, layoutId, convertView, parent);
         convert(viewHolder, mData.get(position));
+        mPosition = position;
         return viewHolder.getConvertView();
     }
-
-    ;
 
     public List<T> getData() {
         return mData;
