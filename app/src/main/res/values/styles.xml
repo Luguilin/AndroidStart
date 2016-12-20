@@ -10,12 +10,6 @@
 
     <style name="AppThemeFull" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
 
-    <style name="Dialog1" parent="android:style/Theme.Dialog">
-        <item name="android:background">#00000000</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-    </style>
     <style name="Dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item><!--边框-->
         <item name="android:background">@android:color/transparent</item><!--边框-->
@@ -36,6 +30,14 @@
         <item name="android:backgroundDimEnabled">false</item>
         <!--进度条颜色-->
         <item name="colorAccent">#B3EEEEEE</item>
+    </style>
+    <style name="LoadingDialog" parent="android:style/Theme.Dialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
     </style>
 
 </resources>

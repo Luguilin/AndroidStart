@@ -26,7 +26,7 @@ public class LDialog {
 
     public Dialog CreateDailog(Context context, @LayoutRes int layoutId, boolean cancelable) {
         this.mConvertView = LayoutInflater.from(context).inflate(layoutId, null, false);
-        mViews = new SparseArray<View>();
+        mViews = new SparseArray<>();
         alertDialog = new Dialog(context, R.style.Dialog);
         alertDialog.addContentView(mConvertView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         //alertDialog.setContentView(view);

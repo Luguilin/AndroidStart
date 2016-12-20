@@ -15,6 +15,7 @@ public class DateHelper {
      * 定义常量
      **/
     public static final String DATE_FULL_STR = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FULL_STR_ZH = "yyyy-MM-dd HH:mm";
     public static final String DATE_ALL_STR = "yyyy-MM-dd HH:mm:ss:SS";//精确到微妙
     public static final String DATE_SMALL_STR = "yyyy-MM-dd";
     public static final String DATE_KEY_STR = "yyMMddHHmmss";

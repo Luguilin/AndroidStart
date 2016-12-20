@@ -117,16 +117,21 @@ public class StringHelper {
         else return file_name.substring(0, file_name.lastIndexOf("."));
     }
 
-    public static String convertNumber2WanString(double number){
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");//格式化设置#,##0.00
-        if (number>10000){
-            number=number/10000;
-
-            return decimalFormat.format(number)+"万";
-        }else{
-            return decimalFormat.format(number)+"";
+    /**
+     * 转换为万
+     *
+     * @param number
+     * @param pattern
+     * @return
+     */
+    public static String convertNumber2WanString(double number, String... pattern) {
+        if (number > 100000) {
+            number = number / 10000;
+            return new DecimalFormat(pattern[0]).format(number) + "万";// 格式化设置
+        } else {
+            if (pattern.length > 1) return new DecimalFormat(pattern[1]).format(number);
+            return number + "";
         }
-
     }
 
 }
