@@ -29,7 +29,7 @@ public class SharedPreHelper {
      * @param object
      */
     public static void put(Context context, String key, Object object) {
-
+        if (context==null||object==null)return;
         SharedPreferences sp = context.getSharedPreferences(SharedPre_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
@@ -58,6 +58,7 @@ public class SharedPreHelper {
      * @return
      */
     public static <T> T get(Context context, String key, Object defaultObject) {
+        if (context==null||defaultObject==null)return null;
         SharedPreferences sp = context.getSharedPreferences(SharedPre_NAME,Context.MODE_PRIVATE);
         if (defaultObject instanceof String) {
             return (T) sp.getString(key, (String) defaultObject);

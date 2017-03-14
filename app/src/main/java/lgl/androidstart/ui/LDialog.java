@@ -28,7 +28,8 @@ public class LDialog {
         this.mConvertView = LayoutInflater.from(context).inflate(layoutId, null, false);
         mViews = new SparseArray<>();
         alertDialog = new Dialog(context, R.style.Dialog);
-        alertDialog.addContentView(mConvertView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        alertDialog.addContentView(mConvertView, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         //alertDialog.setContentView(view);
         if (!cancelable) {
             alertDialog.setCanceledOnTouchOutside(false);
@@ -46,9 +47,17 @@ public class LDialog {
         return alertDialog;
     }
 
-    public void setDismisListener(DialogInterface.OnDismissListener dismisListener) {
-        if (dismisListener != null)
-            alertDialog.setOnDismissListener(dismisListener);
+    public void setDismisListener(LOnDismissListener dismissListener) {
+        this.dismissListener = dismissListener;
+    }
+
+    LOnDismissListener dismissListener;
+
+    public interface LOnDismissListener {
+        /**
+         * @param isComplete
+         */
+        void onDismiss(DialogInterface dialog, boolean isComplete);
     }
 
     public Dialog getDialog() {
